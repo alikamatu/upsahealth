@@ -12,11 +12,6 @@ export default function Home() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // Handle Google Login redirection
-  const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:5000/auth/google";
-  };
-
   // Quotes array
   const quotes = [
     "Mental health is not a destination, but a process. It's about how you drive, not where you're going.",
@@ -66,7 +61,7 @@ export default function Home() {
 
   return (
     <div className="w-screen h-screen overflow-hidden flex items-center py-4 gap-20">
-      <div className="side-bar md:flex flex-col items-start justify-center bg-blue-700 text-white p-3 px-8 mx-6 rounded-3xl h-full w-[25%]">
+      <div className="side-bar md:flex flex-col items-start justify-center bg-blue-700 text-white p-3 px-8 mx-6 rounded-3xl h-full w-[21%]">
         <div className="mt-10">
           <Image src={Logo} alt="Logo here" />
         </div>
@@ -125,11 +120,11 @@ export default function Home() {
             <p className="text-blue-500">Forgot Password?</p>
           </Link>
           {error && <p className="text-red-500">{error}</p>}
-          <button className="bg-blue-700 text-white px-8 py-2 rounded-xl" type="submit">
+          <button className="bg-blue-700 mb-4 text-white px-20 py-2 rounded-xl" type="submit">
             Submit
           </button>
-          <Login />
         </form>
+        <Login />
       </div>
     </div>
   );

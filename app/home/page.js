@@ -1,18 +1,21 @@
 "use client"
-import { useEffect, useState } from "react";
+// Example component
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '../store/action/userAction';
 
 export default function Landing() {
-  const [userName, setUserName] = useState("");
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
 
-  useEffect(() => {
-    // Assuming the name is stored in local storage after login
-    const user = localStorage.getItem("name")
-      setUserName(user);
-  }, []);
+  const handleSetUser = () => {
+    const userData = { name: 'John Doe' }; // Example user data
+    dispatch(setUser(userData));
+  };
 
   return (
-    <h1 className="text-7xl text-blue-900">
-      Hello {userName ? userName : "Guest"}
-    </h1>
+    <div>
+      <h1>Hello {user?.name || 'Guest'}</h1>
+      <button onClick={handleSetUser}>Set User</button>
+    </div>
   );
 }
