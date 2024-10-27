@@ -1,0 +1,111 @@
+/* Home.scss */
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Pushes the content to top and bottom */
+    height: 100%; /* Full height of the container */
+  }
+  
+  .quotes {
+    display: flex;
+    align-items: flex-end; /* Align items to the bottom */
+    padding-bottom: 1rem; /* Add space at the bottom */
+    width: 100%;
+    
+    .quote-slide {
+      animation: flipUp 1s ease-in-out;
+      opacity: 1;
+      transition: opacity 1s ease-in-out;
+      width: 100%;
+    }
+  }
+  /* Home.scss */
+
+/* Flip-up animation */
+@keyframes flipUp {
+    0% {
+      opacity: 0;
+      transform: rotateX(90deg);
+    }
+    100% {
+      opacity: 1;
+      transform: rotateX(0deg);
+    }
+  }
+  
+  .quotes {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem; /* Space between the quote and the control bars */
+    
+    .quote-slide {
+      animation: flipUp 1s ease-in-out;
+      opacity: 1;
+      transition: opacity 1s ease-in-out;
+      text-align: center; /* Center text inside quotes */
+    }
+  
+    /* Control bars centered directly below the quote */
+    .controls {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      
+      .control-bar {
+        width: 10px;
+        height: 10px;
+        background-color: #cbd5e1;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+  
+        &.active {
+          background-color: #3b82f6;
+        }
+  
+        &:hover {
+          background-color: #60a5fa;
+        }
+      }
+    }
+  }
+
+  .header-image {
+    display: none;
+  }
+
+@media (max-width: 800px) {
+  .side-bar {
+    display: none;
+  }
+
+  .right {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: start;
+    width: 100%;
+
+    .mb-16 {
+      margin-bottom: 10px;
+    }
+
+    input {
+      border-radius: 0;
+      background: rgba(182, 182, 182, 0.411);
+    }
+
+    .header-image {
+      display: block;
+      margin-bottom: 20px;
+      padding: 10px;
+
+      .image {
+        border-radius: 20px;
+      }
+    }
+  }
+}  

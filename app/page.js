@@ -1,101 +1,136 @@
+"use client";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import "./Home.scss";
+import Logo from "./icons/CompanyLogo.png";
+import Photo from './assets/wallpaper.jpg';
+import Link from "next/link";
+import Login from "./components/login";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.js
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  // Handle Google Login redirection
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:5000/auth/google";
+  };
+
+  // Quotes array
+  const quotes = [
+    "Mental health is not a destination, but a process. It's about how you drive, not where you're going.",
+    "Self-care is how you take your power back.",
+    "Your mental health is a priority. Your happiness is essential. Your self-care is a necessity.",
+  ];
+
+  // State to track current quote index
+  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const handleSelectQuote = (index) => {
+    setCurrentQuoteIndex(index);
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("name", data.user.username);
+        setError("");
+        window.location.href = "/home";
+      } else {
+        const errData = await response.json();
+        setError(errData.message || "Login failed");
+      }
+    } catch (error) {
+      setError("Something went wrong. Please try again.");
+      console.error("Error:", error);
+    }
+  };
+
+  return (
+    <div className="w-screen h-screen overflow-hidden flex items-center py-4 gap-20">
+      <div className="side-bar md:flex flex-col items-start justify-center bg-blue-700 text-white p-3 px-8 mx-6 rounded-3xl h-full w-[25%]">
+        <div className="mt-10">
+          <Image src={Logo} alt="Logo here" />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="text mt-20">
+          <p className="text-5xl">Start your Journey with Us</p>
+          <p className="text-xs mt-5">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus
+            excepturi repudiandae est.
+          </p>
+        </div>
+        <div className="quotes flex mt-40 items-end">
+          <div key={currentQuoteIndex} className="quote-slide bg-blue-800 p-4 rounded-xl">
+            <p className="text-sm">{quotes[currentQuoteIndex]}</p>
+          </div>
+        </div>
+        <div className="controls mt-4 flex gap-2 justify-center">
+          {quotes.map((_, index) => (
+            <span
+              key={index}
+              onClick={() => handleSelectQuote(index)}
+              className={`control-bar ${index === currentQuoteIndex ? "active" : ""}`}
+            />
+          ))}
+        </div>
+      </div>
+      <div className="right">
+        <div className="header-image">
+          <Image className="image" src={Photo} alt="Image here" />
+        </div>
+        <h1 className="text-4xl">SignIn</h1>
+        <p className="mb-16">Welcome to your health plug</p>
+        <form onSubmit={handleSubmit} className="flex-col items-start gap-4">
+          <div className="flex-col">
+            <label htmlFor="email" className="p-2 text-gray-500">Email</label>
+            <input
+              className="border-2 border-gray-400 w-96 rounded-xl px-2 py-2 text-1xl focus:outline-none"
+              type="email"
+              name="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="flex-col">
+            <label htmlFor="password" className="p-2 text-gray-500">Password</label>
+            <input
+              className="border-2 border-gray-400 w-96 rounded-xl px-2 py-2 text-1xl focus:outline-none"
+              type="password"
+              name="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <Link href='/recovery'>
+            <p className="text-blue-500">Forgot Password?</p>
+          </Link>
+          {error && <p className="text-red-500">{error}</p>}
+          <button className="bg-blue-700 text-white px-8 py-2 rounded-xl" type="submit">
+            Submit
+          </button>
+          <Login />
+        </form>
+      </div>
     </div>
   );
 }
