@@ -1,21 +1,56 @@
 "use client"
-// Example component
-import { useDispatch, useSelector } from 'react-redux';
-import { setUser } from '../store/action/userAction';
+import './Landing.scss';
+import Photo from '../assets/meditate.jpg'
+import Image from 'next/image';
+import { useEffect } from 'react';
+
+const quotes = [
+  {
+    text: "The only limit to our realization of tomorrow is our doubts of today.",
+    image: Photo, // Add your image paths
+    citation: "Franklin D. Roosevelt",
+  },
+  {
+    text: "The future belongs to those who believe in the beauty of their dreams.",
+    image: Photo,
+    citation: "Eleanor Roosevelt",
+  },
+  {
+    text: "In the end, we will remember not the words of our enemies, but the silence of our friends.",
+    image: Photo,
+    citation: "Martin Luther King Jr.",
+  },
+  // Add more quotes as needed
+];
 
 export default function Landing() {
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
 
-  const handleSetUser = () => {
-    const userData = { name: 'John Doe' }; // Example user data
-    dispatch(setUser(userData));
-  };
+  
+useEffect(() => {
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('token');
+  const userId = params.get('userId');
+
+  if (token && userId) {
+    // Save token and userId in localStorage
+    localStorage.setItem('token', token);
+    localStorage.setItem('userId', userId);
+
+    // Redirect to the main page or perform other actions
+    window.location.href = '/home';
+  }
+}, []);
+
+
+  const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
   return (
-    <div>
-      <h1>Hello {user?.name || 'Guest'}</h1>
-      <button onClick={handleSetUser}>Set User</button>
+    <div className="landing-container h-screen">
+      <Image src={randomQuote.image} alt="Quote image" className="quote-image" />
+      <div className="quote-texts">
+      <h1 className="quote-text">"{randomQuote.text}"</h1>
+      <p className="quote-citation">- {randomQuote.citation}</p>
+      </div>
     </div>
   );
 }

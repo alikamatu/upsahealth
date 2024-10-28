@@ -19,6 +19,22 @@ export default function Home() {
     "Your mental health is a priority. Your happiness is essential. Your self-care is a necessity.",
   ];
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    const userId = params.get('userId');
+
+    if (token && userId) {
+      // Save token and userId in localStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId);
+
+      // Redirect to the main page or perform other actions
+      window.location.href = '/';
+    }
+  }, []);
+
+
   // State to track current quote index
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
 
@@ -46,7 +62,7 @@ export default function Home() {
       if (response.ok) {
         const data = await response.json();
         localStorage.setItem("token", data.token);
-        localStorage.setItem("name", data.user.username);
+        localStorage.setItem("userId", data.user.id);
         setError("");
         window.location.href = "/home";
       } else {

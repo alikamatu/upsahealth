@@ -1,0 +1,31 @@
+.landing-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background-color: #f0f0f0;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+
+    .quote-image {
+      object-fit: cover;
+    }
+
+    .quote-texts {
+      position: absolute;
+      color: white;
+
+      h1 {
+        font-size: 28px;
+        font-weight: 500;
+        animation: flipUp 1s 0.4s ease-in-out;
+      }
+
+      p {
+        font-style: italic;
+        animation: flipUp 1s 0.6s ease-in-out;
+      }
+    }
+}
