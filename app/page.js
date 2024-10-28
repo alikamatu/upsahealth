@@ -89,7 +89,7 @@ export default function Home() {
       </div>
       <div className="right">
         <div className="header-image">
-          <Image className="image" src={Photo} alt="Image here" />
+          <Image className="image" src={Photo} alt="Image here!" />
         </div>
         <h1 className="text-4xl">SignIn</h1>
         <p className="mb-16">Welcome to your health plug</p>
