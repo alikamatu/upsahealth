@@ -48,7 +48,7 @@ useEffect(() => {
     <div className="landing-container h-screen">
       <Image src={randomQuote.image} alt="Quote image" className="quote-image" />
       <div className="quote-texts">
-      <h1 className="quote-text">"{randomQuote.text}"</h1>
+      <h1 className="quote-text">&quot;{randomQuote.text}&quot;</h1>
       <p className="quote-citation">- {randomQuote.citation}</p>
       </div>
     </div>
