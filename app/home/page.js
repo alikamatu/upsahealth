@@ -37,9 +37,9 @@ useEffect(() => {
     localStorage.setItem('userId', userId);
 
     // Redirect to the main page or perform other actions
-    window.location.href = '/home';
+    window.location.href = '/landing';
   }
-}, []);
+}, [5000]);
 
 
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];

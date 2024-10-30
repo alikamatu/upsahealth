@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 import { Poppins } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "./ThemeContext";
 
 // Importing Poppins font from Google Fonts
 const poppins = Poppins({
@@ -29,6 +30,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
+    <ThemeProvider>
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased`}
@@ -36,5 +38,6 @@ export default function RootLayout({ children }) {
         {children}
       </body>
     </html>
+    </ThemeProvider>
   );
 }

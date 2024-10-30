@@ -25,7 +25,7 @@ export default function Home() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
-    }, 4000);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
 

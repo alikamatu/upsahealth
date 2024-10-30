@@ -15,19 +15,21 @@ export default function Recovery() {
       }
     };
     return (
-       <div>
-
-<form onSubmit={handleSubmit}>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <button type="submit">Recover Password</button>
-        </form>
-       </div>
+      <div className="w-screen h-screen flex flex-col items-center justify-center">
+  <form className="flex flex-col gap-4 items-start p-6" onSubmit={handleSubmit}>
+    <label htmlFor="email" className="text-lg">Email</label>
+    <input
+      className="border-2 border-gray-400 w-80 rounded-xl px-2 py-2 text-lg focus:outline-none"
+      type="email"
+      name="email"
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      required
+    />
+    <button className="bg-blue-700 text-white w-full py-2 rounded-xl mt-4" type="submit">
+      Recover Password
+    </button>
+  </form>
+</div>
       );
 }

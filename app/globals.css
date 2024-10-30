@@ -5,6 +5,8 @@
 /* globals.css */
 body {
     font-family: var(--font-poppins), sans-serif;
+  @apply bg-white text-black;
+
   }
   
   @keyframes flipUp {
@@ -17,3 +19,7 @@ body {
       transform: rotateX(0deg);
     }
   }
+
+.dark body {
+  @apply bg-gray-900 text-white;
+}
