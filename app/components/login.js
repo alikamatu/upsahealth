@@ -4,7 +4,7 @@ function Login() {
   // Trigger Google login
   const handleGoogleLogin = () => {
     // Replace with your backend's Google auth URL
-    window.location.href = "http://localhost:5000/auth/google";
+    window.location.href = "https://upsahealthbackend.vercel.app//auth/google";
   };
 
   return (
