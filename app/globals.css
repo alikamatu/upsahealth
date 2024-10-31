@@ -23,3 +23,12 @@ body {
 .dark body {
   @apply bg-gray-900 text-white;
 }
+
+
+.object-cover {
+  transition: 0.4s;
+}
+
+.title {
+  font-weight: 600;
+}

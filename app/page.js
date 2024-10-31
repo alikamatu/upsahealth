@@ -6,6 +6,8 @@ import Logo from "./icons/CompanyLogo.png";
 import Photo from './assets/wallpaper.jpg';
 import Link from "next/link";
 import Login from "./components/login";
+import MaterialUISwitch from "./dashboard/conponent/MaterialUISwitch ";
+import { useTheme } from "./ThemeContext";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -32,6 +34,9 @@ export default function Home() {
   const handleSelectQuote = (index) => {
     setCurrentQuoteIndex(index);
   };
+
+  const { darkMode, toggleTheme } = useTheme();
+
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -61,7 +66,7 @@ export default function Home() {
 
   return (
     <div className="w-screen h-screen overflow-hidden flex items-center py-4 gap-20">
-      <div className="side-bar md:flex flex-col items-start justify-center bg-blue-700 text-white p-3 px-8 mx-6 rounded-3xl h-full w-[21%]">
+      <div className="side-bar md:flex flex-col items-start justify-center bg-[url('./assets/wallpaper.jpg')] bg-cover bg-left bg-no-repeat bg-blend-hard-light text-white p-3 px-8 mx-6 rounded-3xl h-full w-[21%]">
         <div className="mt-10">
           <Image src={Logo} alt="Logo here" />
         </div>
@@ -86,6 +91,7 @@ export default function Home() {
             />
           ))}
         </div>
+        <MaterialUISwitch onChange={toggleTheme} />
       </div>
       <div className="right">
         <div className="header-image">
@@ -97,7 +103,7 @@ export default function Home() {
           <div className="flex-col">
             <label htmlFor="email" className="p-2 text-gray-500">Email</label>
             <input
-              className="border-2 border-gray-400 w-96 rounded-xl px-2 py-2 text-1xl focus:outline-none"
+              className="border-2 border-gray-400 w-96 rounded-xl px-2 py-2 text-1xl focus:outline-none bg-transparent"
               type="email"
               name="email"
               required
@@ -108,7 +114,7 @@ export default function Home() {
           <div className="flex-col">
             <label htmlFor="password" className="p-2 text-gray-500">Password</label>
             <input
-              className="border-2 border-gray-400 w-96 rounded-xl px-2 py-2 text-1xl focus:outline-none"
+              className="border-2 border-gray-400 w-96 rounded-xl px-2 py-2 text-1xl focus:outline-none bg-transparent"
               type="password"
               name="password"
               required
