@@ -2,7 +2,7 @@ import { FcGoogle } from "react-icons/fc";
 
 function Login() {
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:5000/auth/google";
+    window.location.href = "https://upsahealth.vercel.app/auth/google";
   }
   return (
     <div>
