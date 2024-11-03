@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import AsessmentPhoto from '../assets/assess.png';
+import AsessmentPhoto from '../assets/calm.jpg';
 import BlogPhoto from '../assets/blogs.png';
 import ChatPhoto from '../assets/chat.png';
 import BotPhoto from '../assets/AI.jpg';
@@ -9,45 +9,47 @@ import ProfessionalPhoto from '../assets/professionals.png';
 
 export default function PageNav() {
     return (
-        <div className="flex flex-col">
+        <div className="page flex flex-col">
             <h1 className="py-4 text-2xl font-semibold text-gray-800 dark:text-white">
                 Hello, Alikamatu Osama, What are we doing today?
             </h1>
             <div className="sections-container w-[100%] flex flex-wrap mt-8 gap-4 items-start">
-                <Link href="/dashboard/self-assessment" className="w-[23%] rounded-2xl overflow-hidden">
+                <Link href="/dashboard/self-assessment" className="w-[100%] h-96 rounded-2xl overflow-hidden">
                     <div className="relative">
-                        <Image src={AsessmentPhoto} alt="Self-Assessment" className="relative object-cover dark:opacity-80 scale-[104%] hover:scale-[100%]" />
-                        <div className="absolute bottom-0 flex flex-col text-white p-2 items-start">
-                            <p className="title py-2 text-xl">Self-Assessment</p>
-                            <p>Evaluate your mental well-being through a quick self-assessment tailored to your needs.</p>
-                            <button className="w-full bg-blue-400 text-white py-2 rounded-lg">Get Started</button>
+                        <Image src={AsessmentPhoto} alt="Self-Assessment" className="relative object-cover dark:opacity-80 translate-y-[-296px] scale-[104%] hover:scale-[100%]" />
+                        <div className="absolute top-0 w-96 h-96 flex flex-col text-white p-2 gap-4 items-start justify-center">
+                            <p className="title py-2 text-4xl">Self-Assessment</p>
+                            <p className="text-xl">Evaluate your mental well-being through a quick self-assessment tailored to your needs.</p>
+                            <button className="w-full bg-gray-800 text-white py-2 rounded-lg">Get Started</button>
                         </div>
                     </div>
                 </Link>
                 
-                <Link href="/dashboard/chatbot" className="w-[23%] rounded-2xl overflow-hidden">
+               <div className="flex items-center justify-between">
+               <Link href="/dashboard/chatbot" className="w-[48%] h-[25%] rounded-2xl overflow-hidden">
                     <div className="relative">
                         <Image src={BotPhoto} alt="AI Assistance" className="relative object-cover dark:opacity-80 scale-[104%] hover:scale-[100%]" />
                         <div className="absolute bottom-0 flex flex-col text-white p-2 items-start">
-                            <p className="title py-2 text-xl">AI Assistance</p>
-                            <p>Chat with our AI assistant for mental wellness guidance and helpful resources.</p>
-                            <button className="w-full bg-blue-400 text-white py-2 rounded-lg">Talk to AI</button>
+                            <p className="title py-2 text-sm">AI Assistance</p>
+                            <p className="text-xs">Chat with our AI assistant for mental wellness guidance and helpful resources.</p>
+                            <button className="btn w-full bg-blue-400 text-xs text-white py-1 rounded-lg">Talk to AI</button>
                         </div>
                     </div>
                 </Link>
 
-                <Link href="/dashboard/community-chat" className="w-[23%] rounded-2xl overflow-hidden">
+              <div className="flex flex-col w-[50%] gap-4">
+              <Link href="/dashboard/community-chat" className="w-[100%] h-[38vh] rounded-2xl overflow-hidden">
                     <div className="relative">
-                        <Image src={ChatPhoto} alt="Community Chat" className="relative object-cover dark:opacity-80 scale-[104%] hover:scale-[100%]" />
-                        <div className="absolute bottom-0 flex flex-col text-white p-2 items-start">
+                        <Image src={ChatPhoto} alt="Community Chat" className="relative object-cover dark:opacity-80 translate-y-[-200px] scale-[104%] hover:scale-[100%]" />
+                        <div className="absolute top-0 w-96  flex flex-col text-white p-2 items-start">
                             <p className="title py-2 text-xl">Community Chat</p>
                             <p>Engage in meaningful conversations with a supportive mental wellness community.</p>
-                            <button className="w-full bg-blue-400 text-white py-2 rounded-lg">Join Chat</button>
+                            <button className="w-full bg-orange-600 text-white py-2 rounded-lg">Join Chat</button>
                         </div>
                     </div>
                 </Link>
 
-                <Link href="/dashboard/blog" className="w-[23%] rounded-2xl overflow-hidden">
+                <Link href="/dashboard/blog" className="w-[100%] h-[38vh] rounded-2xl overflow-hidden">
                     <div className="relative">
                         <Image src={BlogPhoto} alt="Blogging" className="relative object-cover dark:opacity-80 scale-[104%] hover:scale-[100%]" />
                         <div className="absolute bottom-0 flex flex-col text-white p-2 items-start">
@@ -57,8 +59,10 @@ export default function PageNav() {
                         </div>
                     </div>
                 </Link>
+              </div>
+               </div>
 
-                <Link href="/dashboard/library" className="w-[23%] rounded-2xl overflow-hidden">
+                <Link href="/dashboard/library" className="w-[49%] rounded-2xl overflow-hidden">
                     <div className="relative">
                         <Image src={LibraryPhoto} alt="Library" className="relative object-cover dark:opacity-80 scale-[104%] hover:scale-[100%]" />
                         <div className="absolute bottom-0 flex flex-col text-white p-2 items-start">
@@ -69,7 +73,7 @@ export default function PageNav() {
                     </div>
                 </Link>
 
-                <Link href="/dashboard/professionals" className="w-[23%] rounded-2xl overflow-hidden">
+                <Link href="/dashboard/professionals" className="w-[49%] rounded-2xl overflow-hidden">
                     <div className="relative">
                         <Image src={ProfessionalPhoto} alt="Professional Help" className="relative object-cover dark:opacity-80 scale-[104%] hover:scale-[100%]" />
                         <div className="absolute bottom-0 flex flex-col text-white p-2 items-start">

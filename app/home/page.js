@@ -1,13 +1,13 @@
-"use client"
+"use client";
 import './Landing.scss';
-import Photo from '../assets/meditate.jpg'
+import Photo from '../assets/meditate.jpg';
 import Image from 'next/image';
 import { useEffect } from 'react';
 
 const quotes = [
   {
     text: "The only limit to our realization of tomorrow is our doubts of today.",
-    image: Photo, // Add your image paths
+    image: Photo,
     citation: "Franklin D. Roosevelt",
   },
   {
@@ -24,23 +24,20 @@ const quotes = [
 ];
 
 export default function Landing() {
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    const userId = params.get('userId');
 
-  
-useEffect(() => {
-  const params = new URLSearchParams(window.location.search);
-  const token = params.get('token');
-  const userId = params.get('userId');
+    if (token && userId) {
+      localStorage.setItem('token', token);
+      localStorage.setItem('userId', userId);
 
-  if (token && userId) {
-    // Save token and userId in localStorage
-    localStorage.setItem('token', token);
-    localStorage.setItem('userId', userId);
-
-    // Redirect to the main page or perform other actions
-    window.location.href = '/landing';
-  }
-}, [5000]);
-
+      setTimeout(() => {
+        window.location.href = '/loader';
+      }, 5000); 
+    }
+  }, []);
 
   const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 
@@ -48,8 +45,8 @@ useEffect(() => {
     <div className="landing-container h-screen">
       <Image src={randomQuote.image} alt="Quote image" className="quote-image" />
       <div className="quote-texts">
-      <h1 className="quote-text">&quot;{randomQuote.text}&quot;</h1>
-      <p className="quote-citation">- {randomQuote.citation}</p>
+        <h1 className="quote-text">&quot;{randomQuote.text}&quot;</h1>
+        <p className="quote-citation">- {randomQuote.citation}</p>
       </div>
     </div>
   );

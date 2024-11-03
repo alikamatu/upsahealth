@@ -29,6 +29,29 @@ body {
   transition: 0.4s;
 }
 
+.asbnt {
+  transition: 0.3s;
+}
+
 .title {
   font-weight: 600;
+}
+
+.btn {
+  font-weight: 600;
+}
+
+.page {
+  animation: Top 1s;
+}
+
+@keyframes Top {
+  0% {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }

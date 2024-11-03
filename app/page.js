@@ -6,7 +6,6 @@ import Logo from "./icons/CompanyLogo.png";
 import Photo from './assets/wallpaper.jpg';
 import Link from "next/link";
 import Login from "./components/login";
-import MaterialUISwitch from "./dashboard/conponent/MaterialUISwitch ";
 import { useTheme } from "./ThemeContext";
 
 export default function Home() {
@@ -53,7 +52,7 @@ export default function Home() {
         localStorage.setItem("token", data.token);
         localStorage.setItem("userId", data.user.id);
         setError("");
-        window.location.href = "/home";
+        window.location.href = "/loader";
       } else {
         const errData = await response.json();
         setError(errData.message || "Login failed");
@@ -72,26 +71,12 @@ export default function Home() {
         </div>
         <div className="text mt-20">
           <p className="text-5xl">Start your Journey with Us</p>
-          <p className="text-xs mt-5">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloribus
-            excepturi repudiandae est.
-          </p>
         </div>
-        <div className="quotes flex mt-40 items-end">
+        <div className="quotes flex items-end">
           <div key={currentQuoteIndex} className="quote-slide bg-blue-800 p-4 rounded-xl">
             <p className="text-sm">{quotes[currentQuoteIndex]}</p>
           </div>
         </div>
-        <div className="controls mt-4 flex gap-2 justify-center">
-          {quotes.map((_, index) => (
-            <span
-              key={index}
-              onClick={() => handleSelectQuote(index)}
-              className={`control-bar ${index === currentQuoteIndex ? "active" : ""}`}
-            />
-          ))}
-        </div>
-        <MaterialUISwitch onChange={toggleTheme} />
       </div>
       <div className="right">
         <div className="header-image">
