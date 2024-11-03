@@ -1,8 +1,17 @@
-export default function Blog() {
+import { useEffect, useState } from 'react';
+
+export default function BlogPage() {
+    const [myValue, setMyValue] = useState(null);
+
+    useEffect(() => {
+        const value = localStorage.getItem('myKey');
+        setMyValue(value);
+    }, []);
 
     return (
-        <div className="flex">
-            Hello
+        <div>
+            <h1>Blog Page</h1>
+            <p>Value from localStorage: {myValue}</p>
         </div>
-    )
+    );
 }
