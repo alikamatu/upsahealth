@@ -5,11 +5,11 @@ import Image from 'next/image';
 import ProfilePhoto from '../assets/profile.jpg';
 import { Analytics, AssistantRounded, ChatOutlined, DarkMode, Dashboard, LibraryBooksOutlined, SendRounded } from '@mui/icons-material';
 import GridViewRoundedIcon from '@mui/icons-material/GridViewRounded';
-import MaterialUISwitch from './conponent/MaterialUISwitch';
 import { useTheme } from '../ThemeContext';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import MaterialUISwitch from './conponent/MaterialUISwitch ';
 
 export default function SideNav({ id }) {
     const { darkMode, toggleTheme } = useTheme();
