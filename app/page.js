@@ -41,7 +41,7 @@ export default function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://upsahealthbackend.vercel.app//api/auth/login", {
+      const response = await fetch("https://healthbackend.vercel.app/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
