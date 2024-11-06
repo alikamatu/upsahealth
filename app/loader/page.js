@@ -2,7 +2,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import LoadingAnimation from '../components/LoadingAnimation';
 
 export default function CheckProfile() {
   const router = useRouter();
@@ -42,7 +41,7 @@ export default function CheckProfile() {
 
   return (
     <div className="loading-screen">
-      <LoadingAnimation />
+    loading...
     </div>
   );
 }
