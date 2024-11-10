@@ -1,0 +1,118 @@
+/* Chatroom.css */
+.chatroom {
+    width: 100%;
+    display: flex;
+  }
+  
+  .groups {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+    border-right: 1px solid #80808042;
+    width: 20%;
+  }
+
+  .groups > h2 {
+    background: #002c5a;
+    color: white;
+    padding-bottom: 10px;
+    width: 100%;
+    padding: 5px;
+  }
+  
+  .group-button {
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    text-align: start;
+    width: 100%;
+  }
+
+  .group-button:hover {
+    background: #dddddd52;
+  }
+  
+  .group-button.active {
+    background-color: #80808042;
+  }
+  
+  .chat-window {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 96vh;
+  }
+
+  .chat-window > h3 {
+    background: #002c5a;
+    color: white;
+    padding-bottom: 10px;
+    width: 100%;
+    padding: 5px;
+  }
+  
+  .messages {
+    max-height: 100%;
+    overflow-y: scroll;
+    margin-bottom: 10px;
+    padding: 10px;
+  }
+  
+  .message {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .profile-photo {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+  }
+  
+  .message-content {
+    background-color: #80808042;
+    border-radius: 20px;
+    padding: 5px 20px;
+    font-size: 13px;
+    max-width: 80%;
+    word-wrap: break-word;
+  }
+  
+  .message-content strong {
+    display: block;
+    font-size: 12px;
+  }
+  
+  .message-input {
+    display: flex;
+    gap: 10px;
+    height: 6%;
+    margin: 10px;
+  }
+  
+  .message-input input {
+    flex-grow: 1;
+    padding: 8px;
+    border-radius: 30px;
+    border: 1px solid #ddd;
+    background: transparent;
+  }
+
+  input:focus {
+    outline: none;
+  }
+  
+  .message-input button {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  

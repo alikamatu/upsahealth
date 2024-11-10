@@ -6,7 +6,6 @@ import Logo from "./icons/CompanyLogo.png";
 import Photo from './assets/wallpaper.jpg';
 import Link from "next/link";
 import Login from "./components/login";
-import { useTheme } from "./ThemeContext";
 
 export default function Home() {
   const [email, setEmail] = useState("");
@@ -34,14 +33,12 @@ export default function Home() {
     setCurrentQuoteIndex(index);
   };
 
-  const { darkMode, toggleTheme } = useTheme();
-
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("https://healthbackend.vercel.app/api/auth/login", {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -82,7 +79,7 @@ export default function Home() {
         <div className="header-image">
           <Image className="image" src={Photo} alt="Image here!" />
         </div>
-        <h1 className="text-4xl">SignIn</h1>
+        <h1 className="text-4xl mb-2">Sign In your Account</h1>
         <p className="mb-16">Welcome to your health plug</p>
         <form onSubmit={handleSubmit} className="flex-col items-start gap-4">
           <div className="flex-col">

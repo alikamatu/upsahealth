@@ -58,7 +58,7 @@ export default function ProfileSetup() {
 
       const result = await response.json();
       console.log("Profile updated successfully:", result);
-      window.location.href = "/dashboard";
+      window.location.href = "/loader";
     } catch (error) {
       console.error("Request failed:", error);
     }
@@ -94,6 +94,7 @@ export default function ProfileSetup() {
       {currentQuestionIndex === 1 && (
         <div className={`mb-4 ${fadeClass}`}>
           <label className="block">{questions[currentQuestionIndex].label}</label>
+          <p className="text-red-600">Please do not use your real name. This name will be displayed publicly on the platform</p>
           <input
             type="text"
             value={profileName}

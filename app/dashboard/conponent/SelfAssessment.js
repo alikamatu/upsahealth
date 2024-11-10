@@ -27,7 +27,11 @@ const questions = [
         options: ["Never", "Rarely", "Sometimes", "Often", "Always"],
         type: "rating"
     },
-    // Add remaining questions following the same structure
+    {
+        id: 5,
+        question: "Have you faced a suicidal descision in your lifetime",
+        options: ["Mmm yaeh", "nope", "Not quiet sure"]
+    }
 ];
 
 export default function SelfAssessment() {
@@ -40,7 +44,7 @@ export default function SelfAssessment() {
         setAnswers(updatedAnswers);
 
         if (currentQuestionIndex < questions.length - 1) {
-            setCurrentQuestionIndex(currentQuestionIndex + 1); // Move to next question
+            setCurrentQuestionIndex(currentQuestionIndex + 1);
         } else {
             calculateResult(updatedAnswers);
         }
