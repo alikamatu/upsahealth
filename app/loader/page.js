@@ -20,6 +20,7 @@ export default function CheckProfile() {
       try {
         console.log(`Fetching username for user ID: ${userId}`);
         const response = await axios.get(`https://healthbackend-f1ev.onrender.com/api/auth/avatar/${userId}`);
+        const response = await axios.get(`http://localhost:5000/api/auth/avatar/${userId}`);
         console.log('Response:', response.data);
         localStorage.setItem('avatar', response.data.avatar)
 
