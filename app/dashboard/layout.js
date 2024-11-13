@@ -25,7 +25,7 @@ export default function DashboardLayout({ children }) {
 
       const fetchUser = async () => {
           try {
-              const response = await axios.get(`http://localhost:5000/api/user/${userId}`);
+              const response = await axios.get(`https://healthbackend.vercel.app/api/user/${userId}`);
               setUser(response.data); // Assuming the response contains the user object
           } catch (err) {
               setError("Failed to fetch user data");

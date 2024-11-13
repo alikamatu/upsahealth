@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react";
-import { motion } from "framer-motion"; // Import motion from framer-motion
+import { motion } from "framer-motion";
 
 const questions = [
     { 
@@ -71,13 +71,17 @@ export default function SelfAssessment() {
         else if (totalScore <= 20) mood = "High Stress";
         else mood = "Severe Stress";
 
-        setResult(`Your mood is: ${mood}`);
+        setResult(`${mood}`);
     };
 
     const currentQuestion = questions[currentQuestionIndex];
 
+    if (result === "Very Calm") {
+        return <>Grrr to the world</>
+    }
+
     return (
-        <div className="w-screen h-screen flex items-center justify-center p-6">
+        <div className="w-[100%] flex items-center justify-center p-6">
             {result ? (
                 <div className="text-center">
                     <h2 className="text-2xl font-semibold">{result}</h2>

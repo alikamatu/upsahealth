@@ -79,11 +79,11 @@ export default function ChatRoom() {
 
       <div className="chat-window">
         {currentGroup && (
-          <div className="chat-header flex items-center gap-2">
+          <div className="chat-header flex items-center px-4 bg-[#002c5a] py-2 gap-2">
             <img
               src={groupPhotos[currentGroup]} // Display the active group's photo in the header
-              width={50}
-              height={50}
+              width={40}
+              height={40}
               className="rounded-full object-cover"
               alt={`${currentGroup} chat`}
             />

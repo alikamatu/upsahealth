@@ -18,7 +18,7 @@ export default function CommentPage() {
         if (postId) {
             const fetchPost = async () => {
                 try {
-                    const response = await fetch(`http://localhost:5000/api/post/fetchpost/${postId}`);
+                    const response = await fetch(`https://healthbackend.vercel.app/api/post/fetchpost/${postId}`);
                     if (response.ok) {
                         const postData = await response.json();
                         setPost(postData);
@@ -36,7 +36,7 @@ export default function CommentPage() {
     // Handle comment submission
     const handleCommentSubmit = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/api/post/${postId}/comments`, {
+            const response = await fetch(`https://healthbackend.vercel.app/api/post/${postId}/comments`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ avatarUrl: userAvatar, userName: user.profileName, text: newComment })
@@ -55,7 +55,7 @@ export default function CommentPage() {
 
     const handleLike = async (postId, index) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/post/${postId}/like`, {
+            const response = await fetch(`https://healthbackend.vercel.app/api/post/${postId}/like`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userId: user._id }),

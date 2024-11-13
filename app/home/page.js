@@ -35,7 +35,7 @@ export default function Landing() {
 
       setTimeout(() => {
         window.location.href = '/loader';
-      }, 5000); 
+      }, 3000); 
     }
   }, []);
 

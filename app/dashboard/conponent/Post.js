@@ -15,7 +15,7 @@ export default function Post({ initialPosts = [] }) {
         if (!initialPosts.length) {
             const fetchPosts = async () => {
                 try {
-                    const response = await fetch("http://localhost:5000/api/post/fetchpost");
+                    const response = await fetch("https://healthbackend.vercel.app/api/post/fetchpost");
                     if (response.ok) {
                         const postData = await response.json();
                         const formattedData = postData.map((post) => ({

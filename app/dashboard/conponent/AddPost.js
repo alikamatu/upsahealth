@@ -27,7 +27,7 @@ export default function AddPost({ fetchPosts }) {  // Accept fetchPosts as prop
         if (!caption.trim()) return alert("Caption cannot be empty.");
         setLoading(true);
         try {
-            const response = await fetch('http://localhost:5000/api/post/addpost', {
+            const response = await fetch('https://healthbackend.vercel.app/api/post/addpost', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -41,7 +41,6 @@ export default function AddPost({ fetchPosts }) {  // Accept fetchPosts as prop
             if (response.ok) {
                 setCaption("");
                 fetchPosts();  // Call fetchPosts after adding a new post
-                alert("Post shared success[100%]y!");
             } else {
                 throw new Error("Failed to share post.");
             }

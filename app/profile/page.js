@@ -43,7 +43,7 @@ export default function ProfileSetup() {
     const data = { userId, avatar, age, gender, profileName };
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/profile", {
+      const response = await fetch("https://healthbackend.vercel.app/api/auth/profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),

@@ -8,7 +8,7 @@ export default function Recovery() {
     const handleSubmit = async (e) => {
       e.preventDefault();
       try {
-        await axios.post('http://localhost:5000/api/auth/password-recovery', { email });
+        await axios.post('https://healthbackend.vercel.app//api/auth/password-recovery', { email });
         alert('Recovery email sent!');
       } catch (error) {
         alert('Error sending recovery email');
