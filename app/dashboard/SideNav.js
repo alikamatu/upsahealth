@@ -10,12 +10,12 @@ import Link from 'next/link';
 import MaterialUISwitch from './conponent/MaterialUISwitch ';
 import { AiFillHeart, AiFillPropertySafety } from 'react-icons/ai';
 
-export default function SideNav({ user, userAvatar }) {
+export default function SideNav({ user, userAvatar, isSidebarVisible }) {
     const { darkMode, toggleTheme } = useTheme();
 
     
     return (
-        <aside className='h-screen w-[15%] p-4 border-r-[1px] border-[#80808042]'>
+        <aside className={`${isSidebarVisible ? 'block' : 'hidden'} md:block md:w-[15%] h-screen w-[100%] p-4 border-r-[1px] border-[#80808042]`}>
             <div className="h-[100%] p-4 flex flex-col justify-between items-center">
                 <div className="top-aside flex flex-col justify-between items-center h-[60%]">
                     <div className="logo-section mb-2">

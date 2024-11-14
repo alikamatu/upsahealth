@@ -32,11 +32,11 @@ export default function Blog() {
 
     return (
         <div className="flex w-[100%] gap-8 p-8 justify-start items-start">
-            <div className="flex w-[65%] flex-col items-start justify-start">
+            <div className="flex w-[100%] md:w-[65%] flex-col items-start justify-start">
             <AddPost fetchPosts={fetchPosts} />
             <Post post={posts} />
             </div>
-            <div className="w-[30%] h-screen p-8 border-l-2 border-[#80808042] fixed right-0 top-0">
+            <div className="hidden md:block w-[30%] h-screen p-8 border-l-2 border-[#80808042] fixed right-0 top-0">
                 <BlogProfessionals />
             </div>
         </div>

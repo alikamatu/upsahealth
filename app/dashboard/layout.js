@@ -4,6 +4,7 @@ import axios from "axios";
 import SideNav from "./SideNav";
 import { UserContext } from "./context/userContext";
 import LoadingAnimation from "../components/LoadingAnimation";
+import TopNav from "./conponent/TopNav";
 
 export default function DashboardLayout({ children }) {
   const [user, setUser] = useState(null);
@@ -37,6 +38,14 @@ export default function DashboardLayout({ children }) {
       fetchUser();
   }, [userId]);
 
+  
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+
+  // Toggle sidebar visibility
+  const toggleSidebar = () => {
+      setIsSidebarVisible(!isSidebarVisible);
+  };
+
   if (loading) return <div><LoadingAnimation /></div>;
   if (error) return <div>{error}</div>;
   if (!user) return <div>User not found</div>;
@@ -44,9 +53,14 @@ export default function DashboardLayout({ children }) {
   return (
     <UserContext.Provider value={{ user, userAvatar }}>
       <div className="flex w-screen h-screen">
-        <SideNav user={user} userAvatar={userAvatar} />
+        <SideNav isSidebarVisible={isSidebarVisible} user={user} userAvatar={userAvatar} />
         <div className="flex-grow p-0 overflow-x-hidden">
-          {children}
+          <div className="md:hidden p-8 pb-0">
+          <TopNav toggleSidebar={toggleSidebar} isSidebarVisible={isSidebarVisible}  />
+          </div>
+         <div className={`${isSidebarVisible? 'hidden': 'block'}`}>
+         {children}
+         </div>
         </div>
       </div>
     </UserContext.Provider>
