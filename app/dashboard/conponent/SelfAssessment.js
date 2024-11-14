@@ -81,7 +81,7 @@ export default function SelfAssessment() {
     }
 
     return (
-        <div className="w-[100%] flex items-center justify-center p-6">
+        <div className="w-screen h-screen p-0 md:h-full md:w-[100%] flex items-center justify-center md:p-6">
             {result ? (
                 <div className="text-center">
                     <h2 className="text-2xl font-semibold">{result}</h2>
@@ -99,7 +99,7 @@ export default function SelfAssessment() {
                     transition={{ duration: 0.5 }} // Animation duration
                 >
                     <h2 className="text-xl font-semibold">{currentQuestion.question}</h2>
-                    <div className="flex gap-2 w-[50%] flex-wrap items-center justify-center">
+                    <div className="flex gap-2 w-full md:w-[50%] flex-wrap items-center justify-center">
                         {currentQuestion.options.map((option, index) => (
                             <button
                                 key={index}

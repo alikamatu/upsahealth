@@ -116,3 +116,40 @@
     cursor: pointer;
   }
   
+  @media (max-width: 800px) {
+    .chatroom {
+      flex-direction: column-reverse;
+      height: 100%;
+    }
+
+    .groups {
+      display: flex;
+      flex-direction: row;
+      position: fixed;
+      bottom: 0;
+      overflow-x: scroll;
+      width: 100%;
+    }
+
+
+    .groups h2 {
+      display: none;
+    }
+
+    .group-button {
+      width: 30%;
+      overflow: hidden;
+    }
+
+    .chat-window {
+      height: 92vh;
+    }
+
+    .message-input {
+      margin-bottom: 65px;
+    }
+
+    .message-input button {
+      border-radius: 30px;
+    }
+  }
