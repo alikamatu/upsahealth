@@ -36,7 +36,7 @@ export default function Post({ initialPosts = [] }) {
     // Handle like action for a specific post
     const handleLike = async (postId, index) => {
         try {
-            const response = await fetch(`http://localhost:5000/api/post/${postId}/like`, {
+            const response = await fetch(`https://healthbackend.vercel.app/api/post/${postId}/like`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userId: user._id }),
