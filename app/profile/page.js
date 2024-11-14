@@ -26,7 +26,6 @@ export default function ProfileSetup() {
   const [fadeClass, setFadeClass] = useState("fade-in");
 
   useEffect(() => {
-    // Trigger the fade animation on every question change
     setFadeClass("fade-in");
   }, [currentQuestionIndex]);
 
@@ -35,6 +34,12 @@ export default function ProfileSetup() {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       handleSubmit();
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentQuestionIndex > 0) {
+      setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
   };
 
@@ -65,20 +70,20 @@ export default function ProfileSetup() {
   };
 
   return (
-    <form onSubmit={(e) => e.preventDefault()} className="p-4 max-w-xl mx-auto w-screen h-screen overflow-hidden flex flex-col justify-center gap-4">
-      <h2 className="text-2xl mb-4">Set Up Your Profile</h2>
+    <form onSubmit={(e) => e.preventDefault()} className="p-4 max-w-xl mx-auto w-screen h-screen overflow-hidden flex flex-col justify-center gap-4 bg-[url('./dashboard/assets/wallpaper.png')] bg-cover">
+      <h2 className="text-2xl font-bold mb-4">Set Up Your Profile</h2>
 
       {currentQuestionIndex === 0 && (
         <div className={`mb-4 ${fadeClass}`}>
           <label className="block">{questions[currentQuestionIndex].label}</label>
-          <div className="flex gap-2 mt-2">
+          <div className="flex gap-2 mt-2 justify-center">
             {avatars.map((img, index) => (
               <Image
                 key={index}
                 src={img}
                 alt={`Avatar ${index + 1}`}
                 onClick={() => setAvatar(img)}
-                className={`cursor-pointer w-32 h-32 rounded-full border-2 ${avatar === img ? "border-blue-500" : "border-transparent"}`}
+                className={`cursor-pointer w-16 h-16 md:w-32 md:h-32 rounded-full border-2 ${avatar === img ? "border-blue-500" : "border-transparent"}`}
                 width={200}
                 height={200}
                 required
@@ -102,9 +107,14 @@ export default function ProfileSetup() {
             className="border-2 border-gray-400 w-full mt-4 rounded-xl px-2 py-2 text-1xl focus:outline-none bg-transparent"
             required
           />
-          <button type="button" onClick={handleNext} className="w-full py-4 bg-blue-600 rounded-xl mt-10 text-white">
-            Next
-          </button>
+          <div className="flex gap-2 mt-10">
+            <button type="button" onClick={handlePrevious} className="w-full py-4 bg-gray-600 rounded-xl text-white">
+              Back
+            </button>
+            <button type="button" onClick={handleNext} className="w-full py-4 bg-blue-600 rounded-xl text-white">
+              Next
+            </button>
+          </div>
         </div>
       )}
 
@@ -118,9 +128,14 @@ export default function ProfileSetup() {
             className="border-2 border-gray-400 w-full mt-4 rounded-xl px-2 py-2 text-1xl focus:outline-none bg-transparent"
             required
           />
-          <button type="button" onClick={handleNext} className="w-full py-4 bg-blue-600 rounded-xl mt-10 text-white">
-            Next
-          </button>
+          <div className="flex gap-2 mt-10">
+            <button type="button" onClick={handlePrevious} className="w-full py-4 bg-gray-600 rounded-xl text-white">
+              Back
+            </button>
+            <button type="button" onClick={handleNext} className="w-full py-4 bg-blue-600 rounded-xl text-white">
+              Next
+            </button>
+          </div>
         </div>
       )}
 
@@ -138,9 +153,14 @@ export default function ProfileSetup() {
             <option value="Female">Female</option>
             <option value="Other">Other</option>
           </select>
-          <button type="button" onClick={handleNext} className="w-full py-4 bg-blue-600 rounded-xl mt-10 text-white">
-            Submit
-          </button>
+          <div className="flex gap-2 mt-10">
+            <button type="button" onClick={handlePrevious} className="w-full py-4 bg-gray-600 rounded-xl text-white">
+              Back
+            </button>
+            <button type="button" onClick={handleNext} className="w-full py-4 bg-blue-600 rounded-xl text-white">
+              Submit
+            </button>
+          </div>
         </div>
       )}
     </form>
