@@ -1,10 +1,8 @@
-"use client";
+"use client"
 import { useState, useEffect } from "react";
 import io from "socket.io-client";
 import './Chatroom.css';
 import { useUserContext } from "../context/userContext";
-
-const socket = io("https://healthbackend.vercel.app");
 
 export default function ChatRoom() {
   const [groups, setGroups] = useState(["General", "Sports", "Tech"]);
@@ -21,17 +19,18 @@ export default function ChatRoom() {
   };
 
   useEffect(() => {
-    socket.on("chatHistory", (history) => {
-      setMessages(history);
+    const socket = io("https://healthbackend.vercel.app", {
+      transports: ['websocket'], // Ensure a persistent connection
+      withCredentials: true,     // Handle cross-origin cookies, if needed
     });
 
-    socket.on("receiveMessage", (newMessage) => {
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-    });
+    // Event listeners for receiving messages and chat history
+    socket.on("chatHistory", (history) => setMessages(history));
+    socket.on("receiveMessage", (newMessage) => setMessages((prevMessages) => [...prevMessages, newMessage]));
 
+    // Clean up socket on component unmount
     return () => {
-      socket.off("chatHistory");
-      socket.off("receiveMessage");
+      socket.disconnect();
     };
   }, []);
 
@@ -48,7 +47,7 @@ export default function ChatRoom() {
       socket.emit("sendMessage", { 
         group: currentGroup, 
         user: user.profileName, 
-        profilePhoto: userAvatar, // Send user profile photo with message
+        profilePhoto: userAvatar, 
         message 
       });
       setMessage("");
@@ -66,7 +65,7 @@ export default function ChatRoom() {
             className={`group-button ${group === currentGroup ? "active" : ""} flex items-center gap-2`}
           >
             <img
-              src={groupPhotos[group]} // Display the group-specific photo
+              src={groupPhotos[group]}
               width={40}
               height={40}
               className="rounded-full object-cover"
@@ -81,7 +80,7 @@ export default function ChatRoom() {
         {currentGroup && (
           <div className="chat-header flex items-center px-4 bg-[#002c5a] py-2 gap-2">
             <img
-              src={groupPhotos[currentGroup]} // Display the active group's photo in the header
+              src={groupPhotos[currentGroup]}
               width={40}
               height={40}
               className="rounded-full object-cover"
