@@ -4,7 +4,7 @@ import io from "socket.io-client";
 import './Chatroom.css';
 import { useUserContext } from "../context/userContext";
 
-const socket = io("http://localhost:5000");
+const socket = io("https://healthbackend.vercel.app");
 
 export default function ChatRoom() {
   const [groups, setGroups] = useState(["General", "Sports", "Tech"]);
