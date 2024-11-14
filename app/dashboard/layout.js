@@ -53,7 +53,7 @@ export default function DashboardLayout({ children }) {
   return (
     <UserContext.Provider value={{ user, userAvatar }}>
       <div className="flex w-screen h-screen">
-        <SideNav isSidebarVisible={isSidebarVisible} user={user} userAvatar={userAvatar} />
+        <SideNav isSidebarVisible={isSidebarVisible} toggleSidebar={toggleSidebar} user={user} userAvatar={userAvatar} />
         <div className="flex-grow p-0 overflow-x-hidden">
           <div className="md:hidden p-8 pb-0">
           <TopNav toggleSidebar={toggleSidebar} isSidebarVisible={isSidebarVisible}  />
