@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState, useEffect } from "react";
 import io from "socket.io-client";
 import './Chatroom.css';
@@ -21,18 +21,17 @@ export default function ChatRoom() {
   };
 
   useEffect(() => {
-    const socket = io("https://healthbackend.vercel.app", {
-      transports: ['websocket'], // Ensure a persistent connection
-      withCredentials: true,     // Handle cross-origin cookies, if needed
+    socket.on("chatHistory", (history) => {
+      setMessages(history);
     });
 
-    // Event listeners for receiving messages and chat history
-    socket.on("chatHistory", (history) => setMessages(history));
-    socket.on("receiveMessage", (newMessage) => setMessages((prevMessages) => [...prevMessages, newMessage]));
+    socket.on("receiveMessage", (newMessage) => {
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+    });
 
-    // Clean up socket on component unmount
     return () => {
-      socket.disconnect();
+      socket.off("chatHistory");
+      socket.off("receiveMessage");
     };
   }, []);
 
@@ -49,7 +48,7 @@ export default function ChatRoom() {
       socket.emit("sendMessage", { 
         group: currentGroup, 
         user: user.profileName, 
-        profilePhoto: userAvatar, 
+        profilePhoto: userAvatar, // Send user profile photo with message
         message 
       });
       setMessage("");
@@ -67,7 +66,7 @@ export default function ChatRoom() {
             className={`group-button ${group === currentGroup ? "active" : ""} flex items-center gap-2`}
           >
             <img
-              src={groupPhotos[group]}
+              src={groupPhotos[group]} // Display the group-specific photo
               width={40}
               height={40}
               className="rounded-full object-cover"
@@ -82,7 +81,7 @@ export default function ChatRoom() {
         {currentGroup && (
           <div className="chat-header flex items-center px-4 bg-[#002c5a] py-2 gap-2">
             <img
-              src={groupPhotos[currentGroup]}
+              src={groupPhotos[currentGroup]} // Display the active group's photo in the header
               width={40}
               height={40}
               className="rounded-full object-cover"
