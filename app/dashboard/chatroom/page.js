@@ -10,7 +10,6 @@ const socket = io("https://healthbackend.vercel.app", {
   withCredentials: true,
 });
 
-
 export default function ChatRoom() {
   const [groups, setGroups] = useState(["General", "Sports", "Tech"]);
   const [currentGroup, setCurrentGroup] = useState(null);
@@ -18,7 +17,6 @@ export default function ChatRoom() {
   const [message, setMessage] = useState("");
   const { user, userAvatar } = useUserContext();
 
-  // Define group profile photos
   const groupPhotos = {
     General: "/avatars/avatar5.png",
     Sports: "/avatars/avatar5.png",
@@ -26,13 +24,14 @@ export default function ChatRoom() {
   };
 
   useEffect(() => {
-    socket.on("chatHistory", (history) => {
-      setMessages(history);
-    });
+    socket.on("connect", () => console.log("Socket connected!"));
+    socket.on("disconnect", () => console.log("Socket disconnected!"));
+    socket.on("connect_error", (err) => console.error("Connection Error:", err));
 
-    socket.on("receiveMessage", (newMessage) => {
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
-    });
+    socket.on("chatHistory", (history) => setMessages(history));
+    socket.on("receiveMessage", (newMessage) =>
+      setMessages((prevMessages) => [...prevMessages, newMessage])
+    );
 
     return () => {
       socket.off("chatHistory");
@@ -49,12 +48,16 @@ export default function ChatRoom() {
   };
 
   const sendMessage = () => {
-    if (message && user?.username) {
-      socket.emit("sendMessage", { 
-        group: currentGroup, 
-        user: user.profileName, 
-        profilePhoto: userAvatar, // Send user profile photo with message
-        message 
+    if (!currentGroup) {
+      alert("Please join a group first!");
+      return;
+    }
+    if (message && user?.profileName) {
+      socket.emit("sendMessage", {
+        group: currentGroup,
+        user: user.profileName,
+        profilePhoto: userAvatar,
+        message,
       });
       setMessage("");
     }
@@ -68,10 +71,12 @@ export default function ChatRoom() {
           <button
             key={group}
             onClick={() => joinGroup(group)}
-            className={`group-button ${group === currentGroup ? "active" : ""} flex items-center gap-2`}
+            className={`group-button ${
+              group === currentGroup ? "bg-blue-600 text-white" : "bg-gray-200"
+            } flex items-center gap-2 p-2 rounded`}
           >
             <img
-              src={groupPhotos[group]} // Display the group-specific photo
+              src={groupPhotos[group]}
               width={40}
               height={40}
               className="rounded-full object-cover"
@@ -84,9 +89,9 @@ export default function ChatRoom() {
 
       <div className="chat-window">
         {currentGroup && (
-          <div className="chat-header flex items-center px-4 bg-[#002c5a] py-2 gap-2">
+          <div className="chat-header flex items-center px-4 bg-blue-800 py-2 gap-2 text-white">
             <img
-              src={groupPhotos[currentGroup]} // Display the active group's photo in the header
+              src={groupPhotos[currentGroup]}
               width={40}
               height={40}
               className="rounded-full object-cover"
@@ -98,7 +103,11 @@ export default function ChatRoom() {
         <div className="messages">
           {messages.map((msg, index) => (
             <div key={index} className="message">
-              <img src={msg.profilePhoto} alt="Profile" className="profile-photo" />
+              <img
+                src={msg.profilePhoto || "/default-avatar.png"}
+                alt="Profile"
+                className="profile-photo"
+              />
               <div className="message-content">
                 <strong>{msg.user}</strong>
                 <p>{msg.message}</p>
