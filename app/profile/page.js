@@ -70,7 +70,7 @@ export default function ProfileSetup() {
   };
 
   return (
-    <form onSubmit={(e) => e.preventDefault()} className="p-4 max-w-xl mx-auto w-screen h-screen overflow-hidden flex flex-col justify-center gap-4 bg-[url('./dashboard/assets/wallpaper.png')] bg-cover">
+    <form onSubmit={(e) => e.preventDefault()} className="p-4 w-screen h-screen overflow-hidden flex flex-col justify-center gap-4 bg-[url('./dashboard/assets/wallpaper.png')] bg-cover">
       <h2 className="text-2xl font-bold mb-4">Set Up Your Profile</h2>
 
       {currentQuestionIndex === 0 && (
