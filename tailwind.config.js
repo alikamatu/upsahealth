@@ -1,5 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  rules: [
+    {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader', 'postcss-loader'],
+    },
+],
   darkMode: 'class',
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -14,6 +20,9 @@ module.exports = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+      },
+      backgroundImage: {
+        'wallpaper': "url('./dashboard/assets/wallpaper.png')",
       },
     },
   },

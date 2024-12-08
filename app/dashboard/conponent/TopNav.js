@@ -7,7 +7,7 @@ export default function TopNav({toggleSidebar, isSidebarVisible}) {
 
     return (
         <div className="flex w-[100%]">
-            <div className="flex w-full items-center justify-between">
+            <div className="flex w-full h-full items-center justify-between">
                 <div className="name-sec">
                     {isSidebarVisible? <AiOutlineClose onClick={toggleSidebar} />: <AiOutlineMenu onClick={toggleSidebar} />}
                 </div>

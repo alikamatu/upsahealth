@@ -38,7 +38,7 @@ export default function SideNav({ user, userAvatar, isSidebarVisible, toggleSide
                         <Link  href="/dashboard/blog">
                             <div className="flex gap-2 items-center cursor-pointer hover:bg-[#80808042] p-3 rounded-xl w-32">
                                 <SendRounded size='30px' />
-                                <p>Share</p>
+                                <p>Post</p>
                             </div>
                         </Link>
                         <Link  href="/dashboard/chatroom">

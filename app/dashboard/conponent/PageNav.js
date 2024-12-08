@@ -1,93 +1,85 @@
 "use client"
 import Image from "next/image";
 import Link from "next/link";
-import AsessmentPhoto from '../assets/calm.jpg';
-import BlogPhoto from '../assets/blogs.png';
-import ChatPhoto from '../assets/chat.png';
-import BotPhoto from '../assets/AI.jpg';
-import LibraryPhoto from '../assets/library.png';
+import AsessmentPhoto from '../assets/ass.jpg';
+import BlogPhoto from '../assets/community.jpg';
+import ChatPhoto from '../assets/chatcom.jpg';
+import BotPhoto from '../assets/aih.jpg';
+import LibraryPhoto from '../assets/lib.jpg';
 import ProfessionalPhoto from '../assets/professionals.png';
 import { useUserContext } from "../context/userContext";
 
 export default function PageNav() {
 
-    const { user, userAvatar } = useUserContext();
+    const { user } = useUserContext();
+
+    const cards = [
+        {
+            href: "/dashboard/self-assessment",
+            image: AsessmentPhoto,
+            title: "Self-Assessment",
+            description: "Evaluate your skills and track your progress.",
+        },
+        {
+            href: "/dashboard/blog",
+            image: ChatPhoto,
+            title: "Write To The World",
+            description: "Share your thoughts and inspire others.",
+        },
+        {
+            href: "/dashboard/chatroom",
+            image: BlogPhoto,
+            title: "Meet the Community",
+            description: "Connect, collaborate, and grow together.",
+        },
+        {
+            href: "/dashboard/library",
+            image: LibraryPhoto,
+            title: "Read Mindful",
+            description: "Discover curated resources to expand your knowledge.",
+        },
+        {
+            href: "/dashboard/ai",
+            image: BotPhoto,
+            title: "Chatbot Assistance",
+            description: "Get instant help powered by AI.",
+        },
+        {
+            href: "/dashboard/professionals",
+            image: ProfessionalPhoto,
+            title: "Reach Professionals",
+            description: "Connect with experts and mentors in your field.",
+        },
+    ];
 
     return (
         <div className="page flex flex-col justify-center">
-            <h1 className="py-4 text-2xl font-semibold text-gray-800 dark:text-white">
+            <h1 className="py-4 text-2xl font-semibold text-white">
                 Hello, {user.username}, What are we doing today?
             </h1>
-            <div className="sections-container w-[100%] flex flex-wrap mt-6 gap-4 items-start justify-center">
-                <Link href="/dashboard/self-assessment" className="w-[100%] h-96 rounded-2xl overflow-hidden bg-[url('./dashboard/assets/calm.jpg')] bg-cover bg-center backdrop-brightness-200">
-                    <div className="relative">
-                        {/* <Image src={AsessmentPhoto} alt="Self-Assessment" className="relative object-cover dark:opacity-80 translate-y-[-246px] scale-[104%] hover:scale-[100%]" /> */}
-                        <div className="absolute top-0 left-4 w-56 md:w-96 h-96 flex flex-col text-white p-2 gap-4 items-start justify-center">
-                            <p className="title py-2 text-2xl md:text-4xl">Self-Assessment</p>
-                            <p className="text:xs md:text-xl">Evaluate your mental well-being through a quick self-assessment tailored to your needs.</p>
-                            <button className="w-full bg-gray-800 text-white py-2 rounded-lg">Get Started</button>
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-6 gap-6 items-start">
+                {cards.map((card, index) => (
+                    <Link 
+                        key={index} 
+                        href={card.href} 
+                        className={`relative group w-full rounded-2xl h-[250px] md:h-[350px] overflow-hidden bg-cover bg-center 
+                                    animate-fade-in-down`}
+                        style={{
+                            animationDelay: `${index * 100}ms`,
+                            animationFillMode: 'both',
+                        }}
+                    >
+                        <Image 
+                            src={card.image} 
+                            alt={card.title} 
+                            className="object-cover brightness-75 w-full h-full transition-transform duration-500 group-hover:scale-105"
+                        />
+                        <div className="absolute bottom-5 left-5 right-5 text-white bg-black/50 p-4 rounded-lg backdrop-blur-md transition-all duration-500 transform group-hover:translate-y-0 group-hover:opacity-100 opacity-0 -translate-y-[-5px]">
+                            <p className="text-2xl md:text-3xl font-bold">{card.title}</p>
+                            <p className="text-sm md:text-base mt-2 text-gray-300">{card.description}</p>
                         </div>
-                    </div>
-                </Link>
-                
-               <div className="flex items-center justify-between w-full">
-               <Link href="/dashboard/chatbot" className="w-[48%] h-96 md:h-[78vh] rounded-2xl overflow-hidden bg-[url('./dashboard/assets/AI.jpg')] bg-cover bg-center">
-                    <div className="relative">
-                        {/* <Image src={BotPhoto} alt="AI Assistance" className="relative object-cover dark:opacity-80 scale-[104%] hover:scale-[100%]" /> */}
-                        <div className="absolute top-44 md:top-0 flex flex-col text-white p-2 items-start">
-                            <p className="title py-2 text-2xl md:text-4xl">AI Assistance</p>
-                            <p className="text-xs md:text-xl">Chat with our AI assistant for mental wellness guidance and helpful resources.</p>
-                            <button className="btn w-full bg-blue-400 text-xs text-white py-1 rounded-lg">Talk to AI</button>
-                        </div>
-                    </div>
-                </Link>
-
-              <div className="flex flex-col w-[50%] gap-4">
-              <Link href="/dashboard/community-chat" className="w-[100%] h-44 md:h-[38vh] rounded-2xl overflow-hidden bg-[url('./dashboard/assets/chat.png')] bg-cover bg-bottom">
-                    <div className="relative">
-                        {/* <Image src={ChatPhoto} alt="Community Chat" className="relative object-cover dark:opacity-80 translate-y-[-200px] scale-[104%] hover:scale-[100%]" /> */}
-                        <div className="absolute top-0 w-44 md:w-96  flex flex-col text-white p-2 items-start">
-                            <p className="title py-2 text-sm md:text-xl">Community Chat</p>
-                            <p className="text-xs">Engage in meaningful conversations with a supportive mental wellness community.</p>
-                            <button className="w-full bg-orange-600 text-white py-2 rounded-lg">Join Chat</button>
-                        </div>
-                    </div>
-                </Link>
-
-                <Link href="/dashboard/blog" className="w-[100%] h-48 md:h-[38vh] rounded-2xl overflow-hidden bg-[url('./dashboard/assets/blogs.png')] bg-cover bg-bottom">
-                    <div className="relative">
-                        {/* <Image src={BlogPhoto} alt="Blogging" className="relative object-cover dark:opacity-80 scale-[104%] hover:scale-[100%]" /> */}
-                        <div className="absolute top-6 flex flex-col text-white p-2 items-start">
-                            <p className="title py-2 text-sm md:text-4xl">Anonymous Blogging</p>
-                            <p className="text-xs md:text-2xl">Share your experiences and read insights from others in a safe, anonymous space.</p>
-                            <button className="w-full bg-blue-400 text-white py-2 rounded-lg">Start Blogging</button>
-                        </div>
-                    </div>
-                </Link>
-              </div>
-               </div>
-
-                <Link href="/dashboard/library" className="w-[100%] md:w-[49%] h-72 md:h-[70vh] rounded-2xl overflow-hidden bg-[url('./dashboard/assets/library.png')] bg-cover bg-center">
-                    <div className="relative">
-                        {/* <Image src={LibraryPhoto} alt="Library" className="relative object-cover dark:opacity-80 scale-[104%] hover:scale-[100%]" /> */}
-                        <div className="absolute top-36 md:top-0 flex flex-col text-white p-2 items-start">
-                            <p className="title py-2 text-xl">Mental Wellness Library</p>
-                            <p>Explore a curated library of articles and guides on mental health and wellness.</p>
-                            <button className="w-full bg-blue-400 text-white py-2 rounded-lg">Explore Library</button>
-                        </div>
-                    </div>
-                </Link>
-
-                <Link href="/dashboard/professionals" className="w-[100%] md:w-[49%] h-44 md:h-[70vh] rounded-2xl overflow-hidden bg-[url('./dashboard/assets/professionals.png')] bg-cover bg-bottom">
-                    <div className="relative">
-                        {/* <Image src={ProfessionalPhoto} alt="Professional Help" className="relative object-cover dark:opacity-80 scale-[104%] hover:scale-[100%]" /> */}
-                        <div className="absolute top-0 flex flex-col text-white p-2 items-start">
-                            <p className="title py-2 text-xl">Consult a Professional</p>
-                            <p>Connect with licensed professionals who can provide personalized support and advice.</p>
-                            <button className="w-full bg-blue-400 text-white py-2 rounded-lg">Get Help</button>
-                        </div>
-                    </div>
-                </Link>
+                    </Link>
+                ))}
             </div>
         </div>
     );
