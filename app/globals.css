@@ -75,3 +75,19 @@ body {
 .animate-fade-in-down {
   animation: fade-in-down 0.6s ease-out;
 }
+
+@keyframes pop {
+  0%{
+    transform: scale(0%);
+  }
+  50%{
+    transform: scale(110%);
+  }
+  100%{
+    transform: scale(100%);
+  }
+}
+
+.popanim {
+  animation: pop 0.7s ease-in-out;
+}

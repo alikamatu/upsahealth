@@ -5,6 +5,7 @@ import SideNav from "./SideNav";
 import { UserContext } from "./context/userContext";
 import LoadingAnimation from "../components/LoadingAnimation";
 import TopNav from "./conponent/TopNav";
+import MobileNav from "./conponent/MobileNav";
 
 export default function DashboardLayout({ children }) {
   const [user, setUser] = useState(null);
@@ -13,7 +14,6 @@ export default function DashboardLayout({ children }) {
   const [userId, setUserId] = useState(null);
   const [userAvatar, setUserAvatar] = useState(null);
 
-  // Get localStorage data only on the client side
   useEffect(() => {
       const storedUserId = localStorage.getItem("userId");
       const storedAvatar = localStorage.getItem("avatar");
@@ -22,12 +22,12 @@ export default function DashboardLayout({ children }) {
   }, []);
 
   useEffect(() => {
-      if (!userId) return; // Ensure `userId` is set before making the API call
+      if (!userId) return; 
 
       const fetchUser = async () => {
           try {
               const response = await axios.get(`https://healthbackend.vercel.app/api/user/${userId}`);
-              setUser(response.data); // Assuming the response contains the user object
+              setUser(response.data);
           } catch (err) {
               setError("Failed to fetch user data");
           } finally {
@@ -41,7 +41,6 @@ export default function DashboardLayout({ children }) {
   
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
-  // Toggle sidebar visibility
   const toggleSidebar = () => {
       setIsSidebarVisible(!isSidebarVisible);
   };
@@ -53,7 +52,8 @@ export default function DashboardLayout({ children }) {
   return (
     <UserContext.Provider value={{ user, userAvatar }}>
       <div className="flex w-screen h-screen">
-        <SideNav isSidebarVisible={isSidebarVisible} toggleSidebar={toggleSidebar} user={user} userAvatar={userAvatar} />
+        <SideNav user={user} userAvatar={userAvatar} />
+        {isSidebarVisible?<MobileNav isSidebarVisible={isSidebarVisible} toggleSidebar={toggleSidebar} user={user} userAvatar={userAvatar} />:""}
         <div className="flex-grow p-0 justify-center items-center overflow-x-hidden">
           <div className="md:hidden p-8">
           <TopNav toggleSidebar={toggleSidebar} isSidebarVisible={isSidebarVisible}  />

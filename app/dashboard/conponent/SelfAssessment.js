@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react";
 import { motion } from "framer-motion";
+import VeryCalm from "./moodcomponents/VeryCalm";
 
 const questions = [
     { 
@@ -77,11 +78,13 @@ export default function SelfAssessment() {
     const currentQuestion = questions[currentQuestionIndex];
 
     if (result === "Very Calm") {
-        return <>Grrr to the world</>
+        return <>
+        <VeryCalm />
+        </>
     }
 
     return (
-        <div className="w-screen h-screen p-0 md:h-full md:w-[100%] flex items-center justify-center md:p-6">
+        <div className="w-screen h-screen p-0 md:w-[100%] text-white bg-wallpaper flex items-center justify-center md:p-6">
             {result ? (
                 <div className="text-center">
                     <h2 className="text-2xl font-semibold">{result}</h2>
@@ -91,20 +94,20 @@ export default function SelfAssessment() {
                 </div>
             ) : (
                 <motion.div
-                    className="flex w-full flex-col items-center gap-4 p-6"
-                    key={currentQuestionIndex} // Key for triggering animation on question change
-                    initial={{ opacity: 0, y: -20 }} // Initial state
-                    animate={{ opacity: 1, y: 0 }} // Animation state
-                    exit={{ opacity: 0, y: 20 }} // Exit animation state
-                    transition={{ duration: 0.5 }} // Animation duration
+                    className="flex w-full md:w-[50%] flex-col items-center gap-20 backdrop-blur-sm p-10 rounded-xl bg-blue-900/20"
+                    key={currentQuestionIndex} 
+                    initial={{ opacity: 0, y: -20 }} 
+                    animate={{ opacity: 1, y: 0 }} 
+                    exit={{ opacity: 0, y: 20 }} 
+                    transition={{ duration: 0.5 }}
                 >
                     <h2 className="text-xl font-semibold">{currentQuestion.question}</h2>
-                    <div className="flex gap-2 w-full md:w-[50%] flex-wrap items-center justify-center">
+                    <div className="flex gap-2 w-full flex-wrap items-center justify-center">
                         {currentQuestion.options.map((option, index) => (
                             <button
                                 key={index}
                                 onClick={() => handleAnswer(option)}
-                                className="bg-transparent border-[1px] border-gray-600 px-4 py-2 rounded-3xl hover:bg-[#80808060] asbnt"
+                                className="hover:bg-gradient-to-br from-blue-950 via-purple-900 to-blue-900 px-4 py-2 rounded-3xl bg-black/10 duration-300 asbnt"
                             >
                                 {option}
                             </button>

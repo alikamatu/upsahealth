@@ -3,19 +3,19 @@ import './SideNav.scss';
 import Logo from '../icons/CompanyLogo.png';
 import Image from 'next/image';
 import ProfilePhoto from '../assets/profile.jpg';
-import { Analytics, AssistantRounded, ChatOutlined, DarkMode, Dashboard, LibraryBooksOutlined, SendRounded } from '@mui/icons-material';
+import { AssistantRounded, SendRounded } from '@mui/icons-material';
 import GridViewRoundedIcon from '@mui/icons-material/GridViewRounded';
 import { useTheme } from '../ThemeContext';
 import Link from 'next/link';
 import MaterialUISwitch from './conponent/MaterialUISwitch ';
-import { AiFillHeart, AiFillPropertySafety } from 'react-icons/ai';
+import { AiFillHeart, AiOutlineMessage, AiOutlineRead } from 'react-icons/ai';
 
-export default function SideNav({ user, userAvatar, isSidebarVisible, toggleSidebar }) {
+export default function SideNav({ user, userAvatar }) {
     const { darkMode, toggleTheme } = useTheme();
 
     
     return (
-        <aside className={`${isSidebarVisible ? 'block' : 'hidden'} md:block md:w-[200px] h-screen w-[100%] p-4 border-r-[1px] border-[#80808042]`}>
+        <aside className={`hidden md:w-[190px] h-screen w-[100%] p-4 border-r-[1px] border-[#80808042]`}>
             <div className="h-[100%] p-4 flex flex-col justify-between items-center">
                 <div className="top-aside flex flex-col justify-between items-center h-[60%]">
                     <div className="logo-section mb-2">
@@ -43,13 +43,13 @@ export default function SideNav({ user, userAvatar, isSidebarVisible, toggleSide
                         </Link>
                         <Link  href="/dashboard/chatroom">
                             <div className="flex gap-2 items-center cursor-pointer hover:bg-[#80808042] p-3 rounded-xl w-32">
-                                <ChatOutlined size='30px' />
-                                <p>Chatroom</p>
+                                <AiOutlineMessage size='30px' />
+                                <p>Community</p>
                             </div>
                         </Link>
                         <Link  href="/dashboard/library">
                         <div className="flex gap-2 items-center cursor-pointer hover:bg-[#80808042] p-3 rounded-xl w-32">
-                            <LibraryBooksOutlined size='30px' />
+                            <AiOutlineRead size='30px' />
                             <p>Library</p>
                         </div>
                         </Link>
