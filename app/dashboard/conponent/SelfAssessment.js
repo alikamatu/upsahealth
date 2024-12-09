@@ -84,7 +84,7 @@ export default function SelfAssessment() {
     }
 
     return (
-        <div className="w-screen h-screen p-0 md:w-[100%] text-white bg-wallpaper flex items-center justify-center md:p-6">
+        <div className="w-screen h-screen p-0 md:w-[100%] text-black bg-gradient-to-t from-blue-100 to-blue-200 flex items-center justify-center md:p-6">
             {result ? (
                 <div className="text-center">
                     <h2 className="text-2xl font-semibold">{result}</h2>
@@ -94,20 +94,20 @@ export default function SelfAssessment() {
                 </div>
             ) : (
                 <motion.div
-                    className="flex w-full md:w-[50%] flex-col items-center gap-20 backdrop-blur-sm p-10 rounded-xl bg-blue-900/20"
+                    className="flex w-full md:w-[50%] flex-col items-center gap-20 backdrop-blur-sm p-10 rounded-xl bg-white"
                     key={currentQuestionIndex} 
                     initial={{ opacity: 0, y: -20 }} 
                     animate={{ opacity: 1, y: 0 }} 
                     exit={{ opacity: 0, y: 20 }} 
                     transition={{ duration: 0.5 }}
                 >
-                    <h2 className="text-xl font-semibold">{currentQuestion.question}</h2>
+                    <h2 className="text-2xl">{currentQuestion.question}</h2>
                     <div className="flex gap-2 w-full flex-wrap items-center justify-center">
                         {currentQuestion.options.map((option, index) => (
                             <button
                                 key={index}
                                 onClick={() => handleAnswer(option)}
-                                className="hover:bg-gradient-to-br from-blue-950 via-purple-900 to-blue-900 px-4 py-2 rounded-3xl bg-black/10 duration-300 asbnt"
+                                className="hover:bg-gradient-to-br from-blue-950 via-purple-900 to-blue-900 hover:text-white px-4 py-2 rounded-3xl bg-black/10 duration-300 asbnt"
                             >
                                 {option}
                             </button>
