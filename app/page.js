@@ -1,9 +1,8 @@
 "use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-// import "./Home.scss";
 import Logo from "./icons/CompanyLogo.png";
-import Photo from './assets/wallpaper.jpg';
+import Photo from './assets/happy.jpg';
 import Link from "next/link";
 import Login from "./components/login";
 
@@ -12,7 +11,6 @@ export default function Home() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // Quotes array
   const quotes = [
     "Mental health is not a destination, but a process. It's about how you drive, not where you're going.",
     "Self-care is how you take your power back.",
@@ -34,12 +32,10 @@ export default function Home() {
   };
 
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch("https://healthbackend.vercel.app/api/auth/login", {
-      // const response = await fetch("https://healthbackend.vercel.app/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -62,8 +58,8 @@ export default function Home() {
   };
 
   return (
-    <div className="w-screen h-screen overflow-hidden flex items-center py-4 gap-20">
-      <div className="hidden md:flex flex-col items-start justify-between bg-[url('./assets/wallpaper.jpg')] bg-cover bg-left bg-no-repeat bg-blend-hard-light text-white p-3 px-8 mx-6 rounded-3xl h-full w-[21%]">
+    <div className="w-screen h-screen overflow-hidden flex items-center py-4 gap-20 bg-gradient-to-br from-purple-950 via-black/40 to-purple-900 text-white">
+      <div className="hidden md:flex flex-col items-start justify-between bg-[url('./assets/happy.jpg')] bg-cover bg-center bg-no-repeat bg-blend-hard-light text-white p-3 px-8 mx-6 rounded-3xl h-full w-[21%]">
         <div className="mt-10">
           <Image src={Logo} alt="Logo here" />
         </div>
