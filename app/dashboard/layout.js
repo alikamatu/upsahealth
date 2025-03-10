@@ -50,7 +50,7 @@ export default function DashboardLayout({ children }) {
 
   return (
     <UserContext.Provider value={{ user, userAvatar }}>
-      <div className="relative w-screen h-screen overflow-hidden">
+      <div className="relative w-screen h-screen">
         {/* Toggle Button */}
         <ToggleSideNav isVisible={isSidebarVisible} toggleSidebar={toggleSidebar} />
 

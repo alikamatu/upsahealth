@@ -59,26 +59,18 @@ export default function SideNav({ user, userAvatar, isVisible }) {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          className="w-screen h-screen p-8 bg-transparent z-10 fixed flex flex-col items-center justify-center"
+          className="w-screen h-screen p-8 bg-transparent z-1 fixed flex flex-col items-center justify-center"
         >
-          {/* Blurred Background */}
           <div className="absolute inset-0 bg-gradient-to-br from-teal-900/30 via-indigo-900/30 to-purple-900/30 backdrop-blur-2xl z-[-1]" />
 
           <div className="relative z-10 flex flex-col items-center justify-between h-full w-full max-w-4xl">
-            {/* Top Section */}
             <motion.div
               initial={{ scale: 0.85, opacity: 0 }}
               animate={{ scale: 1, opacity: 1, transition: { delay: 0.2, duration: 0.6 } }}
               className="flex flex-col items-center gap-12"
             >
-              {/* Logo */}
               <Image src={Logo} alt="Logo" width={150} height={50} className="object-contain drop-shadow-lg" />
 
-              {/* User Profile */}
               <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1, transition: { delay: 0.4, duration: 0.6 } }}
@@ -104,7 +96,6 @@ export default function SideNav({ user, userAvatar, isVisible }) {
               </motion.div>
             </motion.div>
 
-            {/* Navigation Grid */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0, transition: { delay: 0.6, duration: 0.8 } }}
