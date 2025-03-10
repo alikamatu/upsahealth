@@ -21,7 +21,7 @@ const MobileNav = ({ isSidebarVisible, toggleSidebar, user, userAvatar }) => {
 
     return (
         <div 
-            className={`fixed top-0 left-0 bg-black/50 backdrop-blur-sm z-10 w-screen h-screen 
+            className={`hidden fixed top-0 left-0 bg-black/50 backdrop-blur-sm z-10 w-screen h-screen 
                 transform transition-transform duration-300 ${isSidebarVisible ? "translate-x-0" : "translate-x-full"}`}
         >
             <div className="flex flex-col w-full h-full p-6 justify-between gap-8">

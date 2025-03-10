@@ -1,116 +1,170 @@
 "use client";
-import Image from "next/image";
 import { useEffect, useState } from "react";
-import Logo from "./icons/CompanyLogo.png";
-import Photo from './assets/happy.jpg';
+import Image from "next/image";
 import Link from "next/link";
-import Login from "./components/login";
+import { motion, AnimatePresence } from "framer-motion";
+import Logo from "./icons/CompanyLogo.png";
+import HeroImage from "./assets/happy.jpg"; // Rename for clarity
+
+// Animation Variants
+const heroVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
+};
+
+const quoteVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  exit: { opacity: 0, y: -20, transition: { duration: 0.6 } },
+};
+
+const buttonVariants = {
+  hover: { scale: 1.05, transition: { duration: 0.3 } },
+  tap: { scale: 0.95 },
+};
 
 export default function Home() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
 
   const quotes = [
-    "Mental health is not a destination, but a process. It's about how you drive, not where you're going.",
-    "Self-care is how you take your power back.",
-    "Your mental health is a priority. Your happiness is essential. Your self-care is a necessity.",
+    "Healing begins with a single step—yours.",
+    "You are enough, just as you are.",
+    "Every day is a new chance to nurture your mind.",
   ];
-
-
-  const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
-    }, 5000);
+    }, 6000); // Slower rotation for calm pacing
     return () => clearInterval(interval);
   }, []);
 
-  const handleSelectQuote = (index) => {
-    setCurrentQuoteIndex(index);
-  };
-
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch("https://healthbackend.vercel.app/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("userId", data.user.id);
-        setError("");
-        window.location.href = "/loader";
-      } else {
-        const errData = await response.json();
-        setError(errData.message || "Login failed");
-      }
-    } catch (error) {
-      setError("Something went wrong. Please try again.");
-      console.error("Error:", error);
-    }
-  };
-
   return (
-    <div className="w-screen h-screen overflow-hidden flex items-center py-4 gap-20 bg-gradient-to-br from-purple-950 via-black/40 to-purple-900 text-white">
-      <div className="hidden md:flex flex-col items-start justify-between bg-[url('./assets/happy.jpg')] bg-cover bg-center bg-no-repeat bg-blend-hard-light text-white p-3 px-8 mx-6 rounded-3xl h-full w-[21%]">
-        <div className="mt-10">
-          <Image src={Logo} alt="Logo here" />
-        </div>
-        <div className="text mt-20">
-          <p className="text-5xl">Begin Your Healing Journey with Us</p>
-        </div>
-        <div className="quotes flex items-end">
-          <div key={currentQuoteIndex} className="quote-slide bg-blue-800 p-4 rounded-xl">
-            <p className="text-sm">{quotes[currentQuoteIndex]}</p>
+    <div className="w-screen min-h-screen bg-gradient-to-br from-teal-50 via-indigo-50 to-purple-50 flex flex-col overflow-x-hidden">
+      {/* Hero Section */}
+      <motion.section
+        variants={heroVariants}
+        initial="hidden"
+        animate="visible"
+        className="relative w-full h-screen flex flex-col items-center justify-center text-center px-6 md:px-12 py-20 bg-[url('./assets/happy.jpg')] bg-cover bg-center bg-no-repeat bg-blend-overlay bg-teal-900/60"
+      >
+        {/* Logo */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1, transition: { delay: 0.2, duration: 0.6 } }}
+          className="absolute top-8 left-8 md:left-12"
+        >
+          <Image src={Logo} alt="Mental Health Platform Logo" width={150} height={50} className="object-contain" />
+        </motion.div>
+
+        {/* Main Content */}
+        <div className="max-w-3xl z-10">
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-md">
+            Your Safe Space for Mental Wellness
+          </h1>
+          <p className="text-lg md:text-xl text-gray-200 mb-8 drop-shadow-sm">
+            Discover a community and tools to support your journey toward peace and resilience.
+          </p>
+
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link href="/login">
+              <motion.button
+                variants={buttonVariants}
+                whileHover="hover"
+                whileTap="tap"
+                className="bg-teal-600 hover:bg-teal-700 text-white px-8 py-3 rounded-full shadow-lg text-lg font-semibold transition-colors"
+              >
+                Sign In
+              </motion.button>
+            </Link>
+            <Link href="/signup">
+              <motion.button
+                variants={buttonVariants}
+                whileHover="hover"
+                whileTap="tap"
+                className="bg-transparent border-2 border-teal-400 hover:bg-teal-400/20 text-teal-400 px-8 py-3 rounded-full shadow-lg text-lg font-semibold transition-colors"
+              >
+                Join Us
+              </motion.button>
+            </Link>
           </div>
         </div>
-      </div>
-      <div className="h-screen flex flex-col items-center md:items-start md:justify-center">
-        <div className="header-image">
-          <Image className="md:hidden mb-4 rounded-b-2xl" src={Photo} alt="Image here!" />
+
+        {/* Overlay for Readability */}
+        <div className="absolute inset-0 bg-black/20" />
+      </motion.section>
+
+      {/* Quote Carousel */}
+      <section className="w-full py-16 bg-white/80 backdrop-blur-md">
+        <div className="max-w-4xl mx-auto text-center px-6">
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={currentQuoteIndex}
+              variants={quoteVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="text-lg md:text-2xl text-gray-700 italic"
+            >
+              “{quotes[currentQuoteIndex]}”
+            </motion.p>
+          </AnimatePresence>
+          <div className="flex justify-center gap-2 mt-4">
+            {quotes.map((_, index) => (
+              <span
+                key={index}
+                className={`w-2 h-2 rounded-full ${
+                  index === currentQuoteIndex ? "bg-teal-500" : "bg-gray-300"
+                }`}
+              />
+            ))}
+          </div>
         </div>
-        <h1 className="text-2xl font-bold md:text-4xl mb-2">Sign In to Your Account</h1>
-        <p className="mb-4">Welcome to Your Safe Space</p>
-        <form onSubmit={handleSubmit} className="flex-col items-start gap-4">
-          <div className="flex flex-col">
-            <label htmlFor="email" className="p-2 text-gray-500">Email</label>
-            <input
-              className="border-2 border-gray-400 w-96 rounded-xl px-2 py-2 text-1xl focus:outline-none bg-transparent"
-              type="email"
-              name="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+      </section>
+
+      {/* Footer */}
+      <footer className="w-full py-8 bg-teal-900 text-white text-center">
+        <div className="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 px-6">
+          <p className="text-sm">© 2025 Mental Health Platform. All rights reserved.</p>
+          <div className="flex gap-6">
+            <Link href="/recovery" className="text-teal-300 hover:text-teal-200 transition-colors">
+              Forgot Password?
+            </Link>
+            <Link href="/support" className="text-teal-300 hover:text-teal-200 transition-colors">
+              Support
+            </Link>
           </div>
-          <div className="flex flex-col">
-            <label htmlFor="password" className="p-2 text-gray-500">Password</label>
-            <input
-              className="border-2 border-gray-400 w-96 rounded-xl px-2 py-2 text-1xl focus:outline-none bg-transparent"
-              type="password"
-              name="password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-          <Link href='/recovery'>
-            <p className="text-blue-500 my-4">Forgot Password?</p>
-          </Link>
-          {error && <p className="text-red-500">{error}</p>}
-          <button className="bg-blue-700 mb-4 text-white px-20 py-2 rounded-xl" type="submit">
-            Submit
-          </button>
-        </form>
-        <Login />
-      </div>
+        </div>
+      </footer>
+
+      {/* Global Styles */}
+      <style jsx global>{`
+        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+        body {
+          font-family: "Inter", sans-serif;
+          margin: 0;
+          padding: 0;
+        }
+
+        ::-webkit-scrollbar {
+          width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+          background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          background: rgba(136, 136, 136, 0.5);
+          border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+          background: rgba(85, 85, 85, 0.7);
+        }
+      `}</style>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { UserContext } from "./context/userContext";
 import LoadingAnimation from "../components/LoadingAnimation";
 import TopNav from "./conponent/TopNav";
 import MobileNav from "./conponent/MobileNav";
+import ToggleSideNav from "./conponent/ToggleSideNav";
 
 export default function DashboardLayout({ children }) {
   const [user, setUser] = useState(null);
@@ -13,36 +14,34 @@ export default function DashboardLayout({ children }) {
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState(null);
   const [userAvatar, setUserAvatar] = useState(null);
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
 
   useEffect(() => {
-      const storedUserId = localStorage.getItem("userId");
-      const storedAvatar = localStorage.getItem("avatar");
-      setUserId(storedUserId);
-      setUserAvatar(storedAvatar);
+    const storedUserId = localStorage.getItem("userId");
+    const storedAvatar = localStorage.getItem("avatar");
+    setUserId(storedUserId);
+    setUserAvatar(storedAvatar);
   }, []);
 
   useEffect(() => {
-      if (!userId) return; 
+    if (!userId) return;
 
-      const fetchUser = async () => {
-          try {
-              const response = await axios.get(`https://healthbackend.vercel.app/api/user/${userId}`);
-              setUser(response.data);
-          } catch (err) {
-              setError("Failed to fetch user data");
-          } finally {
-              setLoading(false);
-          }
-      };
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`https://healthbackend.vercel.app/api/user/${userId}`);
+        setUser(response.data);
+      } catch (err) {
+        setError("Failed to fetch user data");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      fetchUser();
+    fetchUser();
   }, [userId]);
 
-  
-  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-
   const toggleSidebar = () => {
-      setIsSidebarVisible(!isSidebarVisible);
+    setIsSidebarVisible((prev) => !prev);
   };
 
   if (loading) return <div><LoadingAnimation /></div>;
@@ -51,17 +50,34 @@ export default function DashboardLayout({ children }) {
 
   return (
     <UserContext.Provider value={{ user, userAvatar }}>
-      <div className="flex w-screen h-screen">
-        <SideNav user={user} userAvatar={userAvatar} />
-        {isSidebarVisible?<MobileNav isSidebarVisible={isSidebarVisible} toggleSidebar={toggleSidebar} user={user} userAvatar={userAvatar} />:""}
+      <div className="relative w-screen h-screen overflow-hidden">
+        {/* Toggle Button */}
+        <ToggleSideNav isVisible={isSidebarVisible} toggleSidebar={toggleSidebar} />
+
+        {/* SideNav with Animation */}
+        <SideNav user={user} userAvatar={userAvatar} isVisible={isSidebarVisible} />
+
+        {/* Main Content */}
         <div className="flex-grow p-0 justify-center items-center overflow-x-hidden">
-          <div className="md:hidden p-8">
-          <TopNav toggleSidebar={toggleSidebar} isSidebarVisible={isSidebarVisible}  />
+          {/* TopNav for Mobile */}
+          <div className="md:hidden p-4">
+            <TopNav toggleSidebar={toggleSidebar} isSidebarVisible={isSidebarVisible} />
           </div>
-         <div className={`${isSidebarVisible? 'hidden': 'block'}`}>
-         {children}
-         </div>
+          {/* Content Area */}
+          <div className={`${isSidebarVisible ? "block" : "block"}`}>
+            {children}
+          </div>
         </div>
+
+        {/* MobileNav (if needed) */}
+        {isSidebarVisible && (
+          <MobileNav
+            isSidebarVisible={isSidebarVisible}
+            toggleSidebar={toggleSidebar}
+            user={user}
+            userAvatar={userAvatar}
+          />
+        )}
       </div>
     </UserContext.Provider>
   );
