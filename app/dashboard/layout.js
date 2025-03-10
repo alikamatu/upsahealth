@@ -60,9 +60,9 @@ export default function DashboardLayout({ children }) {
         {/* Main Content */}
         <div className="flex-grow p-0 justify-center items-center overflow-x-hidden">
           {/* TopNav for Mobile */}
-          <div className="md:hidden p-4">
+          {/* <div className="md:hidden p-4">
             <TopNav toggleSidebar={toggleSidebar} isSidebarVisible={isSidebarVisible} />
-          </div>
+          </div> */}
           {/* Content Area */}
           <div className={`${isSidebarVisible ? "block" : "block"}`}>
             {children}
