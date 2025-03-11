@@ -9,24 +9,30 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { duration: 0.8, ease: "easeOut", staggerChildren: 0.15 },
+    transition: { duration: 0.8, ease: "easeOut", staggerChildren: 0.2 },
   },
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, scale: 0.9, y: 30 },
-  visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-  hover: { scale: 1.04, boxShadow: "0 10px 20px rgba(0, 0, 0, 0.1)", transition: { duration: 0.3 } },
+  hidden: { opacity: 0, scale: 0.8, rotateX: 20, y: 50 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    rotateX: 0,
+    y: 0,
+    transition: { duration: 0.7, ease: "easeOut", type: "spring", stiffness: 100 },
+  },
+  hover: {
+    scale: 1.05,
+    rotateY: 10,
+    boxShadow: "0 15px 30px rgba(45, 212, 191, 0.3)",
+    transition: { duration: 0.4, ease: "easeOut" },
+  },
 };
 
 const textVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-};
-
-const iconVariants = {
-  rest: { scale: 1, rotate: 0 },
-  hover: { scale: 1.2, rotate: 5, transition: { duration: 0.3, type: "spring", stiffness: 200 } },
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };
 
 export default function PageNav() {
@@ -37,48 +43,48 @@ export default function PageNav() {
       href: "/dashboard/self-assessment",
       icon: <FaBrain />,
       title: "Self-Assessment",
-      description: "Take a moment to reflect and grow.",
-      color: "bg-gradient-to-br from-teal-400 to-indigo-400",
+      description: "Tune into your inner world.",
+      color: "bg-gradient-to-br from-teal-500 to-teal-700", // Teal: Introspection, calm
     },
     {
       href: "/dashboard/blog",
       icon: <FaComments />,
       title: "Write to the World",
-      description: "Express yourself and inspire others.",
-      color: "bg-gradient-to-br from-indigo-400 to-purple-400",
+      description: "Let your voice ripple out.",
+      color: "bg-gradient-to-br from-indigo-500 to-indigo-700", // Indigo: Expression, depth
     },
     {
       href: "/dashboard/chatroom",
       icon: <FaHeart />,
       title: "Join the Community",
-      description: "Find your circle of support.",
-      color: "bg-gradient-to-br from-purple-400 to-pink-400",
+      description: "Feel the heartbeat of support.",
+      color: "bg-gradient-to-br from-purple-500 to-purple-700", // Purple: Connection, empathy
     },
     {
       href: "/dashboard/library",
       icon: <FaBook />,
       title: "Mindful Reads",
-      description: "Discover peace through knowledge.",
-      color: "bg-gradient-to-br from-pink-400 to-teal-400",
+      description: "Dive into a sea of calm.",
+      color: "bg-gradient-to-br from-pink-500 to-pink-700", // Pink: Comfort, knowledge
     },
     {
       href: "/dashboard/ai",
       icon: <FaRobot />,
       title: "AI Companion",
-      description: "Your friend for any moment.",
-      color: "bg-gradient-to-br from-teal-400 to-purple-400",
+      description: "A friend who’s always here.",
+      color: "bg-gradient-to-br from-cyan-500 to-cyan-700", // Cyan: Tech, reliability
     },
     {
       href: "/dashboard/professionals",
       icon: <FaUserMd />,
       title: "Find Experts",
-      description: "Connect with caring professionals.",
-      color: "bg-gradient-to-br from-indigo-400 to-pink-400",
+      description: "Guidance from the heart.",
+      color: "bg-gradient-to-br from-blue-500 to-blue-700", // Blue: Trust, expertise
     },
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-indigo-50 to-purple-50 py-12 px-6 md:px-12 overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-indigo-50 to-purple-50 py-12 px-6 md:px-12 overflow-hidden relative">
       {/* Header */}
       <motion.div
         variants={textVariants}
@@ -86,11 +92,11 @@ export default function PageNav() {
         animate="visible"
         className="max-w-7xl mx-auto mb-12 text-center"
       >
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-800 tracking-tight">
-          Welcome, <span className="text-teal-600">{user.username}</span>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-gray-800 tracking-tight bg-gradient-to-r from-teal-600 to-purple-600 bg-clip-text text-transparent">
+          Welcome, {user.username}
         </h1>
         <p className="mt-3 text-lg text-gray-600 font-medium leading-relaxed">
-          Take a deep breath—your journey starts here.
+          Step into your sanctuary—where will you begin?
         </p>
       </motion.div>
 
@@ -99,42 +105,58 @@ export default function PageNav() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
       >
         {cards.map((card, index) => (
           <Link key={index} href={card.href} className="group">
             <motion.div
               variants={cardVariants}
               whileHover="hover"
-              className="relative bg-white/80 backdrop-blur-lg rounded-3xl shadow-md border border-teal-100/50 h-[300px] md:h-[320px] flex flex-col overflow-hidden"
+              className={`relative ${card.color} backdrop-blur-xl rounded-3xl shadow-xl h-[320px] md:h-[340px] flex flex-col overflow-hidden transform-gpu perspective-1000`}
             >
-              {/* Gradient Icon Placeholder */}
-              <div className="relative h-2/3 flex items-center justify-center">
+              {/* Glowing Gradient Overlay */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-t from-gray-900/30 to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-500"
+                animate={{ scale: [1, 1.02, 1], transition: { duration: 3, repeat: Infinity } }}
+              >
                 <motion.div
-                  variants={iconVariants}
-                  initial="rest"
-                  whileHover="hover"
-                  className={`${card.color} w-24 h-24 rounded-full flex items-center justify-center shadow-inner`}
-                >
-                  <span className="text-white text-4xl">{card.icon}</span>
-                </motion.div>
-                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/10 to-transparent opacity-20 group-hover:opacity-30 transition-opacity duration-500" />
-              </div>
+                  className="absolute inset-0 border border-white/20 rounded-3xl animate-glow"
+                  animate={{ opacity: [0.5, 1, 0.5], transition: { duration: 2, repeat: Infinity } }}
+                />
+              </motion.div>
+
+              {/* Icon */}
+              <motion.div
+                className="relative z-10 h-2/3 flex items-center justify-center"
+              >
+                <span className="text-white text-5xl md:text-6xl drop-shadow-lg">{card.icon}</span>
+              </motion.div>
 
               {/* Content */}
-              <div className="p-6 flex-1 flex flex-col justify-between">
+              <div className="relative z-10 p-6 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="text-xl md:text-2xl font-semibold text-gray-900">{card.title}</h3>
-                  <p className="mt-2 text-sm text-gray-600 leading-relaxed">{card.description}</p>
+                  <h3 className="text-xl md:text-2xl font-bold text-white">{card.title}</h3>
+                  <p className="mt-2 text-sm text-gray-100 leading-relaxed">{card.description}</p>
                 </div>
                 <motion.div
-                  className="flex items-center gap-2 text-teal-500 font-medium mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                  initial={{ x: -10 }}
+                  className="flex items-center gap-2 text-white font-semibold mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  initial={{ x: -20 }}
                   animate={{ x: 0 }}
                 >
-                  Let’s Go <FaArrowRight size={16} />
+                  Dive In <FaArrowRight size={16} />
                 </motion.div>
               </div>
+
+              {/* Hover Particle Effect */}
+              <motion.div
+                className="absolute inset-0 pointer-events-none"
+                initial={{ opacity: 0 }}
+                whileHover={{ opacity: 1, transition: { duration: 0.2 } }}
+              >
+                <div className="absolute w-1 h-1 bg-white rounded-full animate-particle top-1/4 left-1/4" />
+                <div className="absolute w-1 h-1 bg-white rounded-full animate-particle top-3/4 right-1/4 delay-200" />
+                <div className="absolute w-1 h-1 bg-white rounded-full animate-particle bottom-1/4 left-3/4 delay-400" />
+              </motion.div>
             </motion.div>
           </Link>
         ))}
@@ -143,16 +165,16 @@ export default function PageNav() {
       {/* Calming Animated Decorations */}
       <div className="fixed inset-0 pointer-events-none z-[-1]">
         <motion.div
-          className="absolute top-10 left-10 w-48 h-48 bg-teal-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20"
-          animate={{ y: [-20, 20, -20], transition: { duration: 10, repeat: Infinity, ease: "easeInOut" } }}
+          className="absolute top-10 left-10 w-56 h-56 bg-teal-200 rounded-full mix-blend-multiply filter blur-3xl opacity-25"
+          animate={{ y: [-25, 25, -25], transition: { duration: 10, repeat: Infinity, ease: "easeInOut" } }}
         />
         <motion.div
-          className="absolute bottom-10 right-10 w-48 h-48 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20"
-          animate={{ y: [20, -20, 20], transition: { duration: 12, repeat: Infinity, ease: "easeInOut" } }}
+          className="absolute bottom-10 right-10 w-56 h-56 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-25"
+          animate={{ y: [25, -25, 25], transition: { duration: 12, repeat: Infinity, ease: "easeInOut" } }}
         />
         <motion.div
-          className="absolute top-1/2 left-1/2 w-64 h-64 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-15"
-          animate={{ scale: [1, 1.1, 1], transition: { duration: 8, repeat: Infinity, ease: "easeInOut" } }}
+          className="absolute top-1/2 left-1/2 w-72 h-72 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20"
+          animate={{ scale: [1, 1.15, 1], transition: { duration: 8, repeat: Infinity, ease: "easeInOut" } }}
         />
       </div>
 
@@ -179,6 +201,42 @@ export default function PageNav() {
 
         ::-webkit-scrollbar-thumb:hover {
           background: rgba(85, 85, 85, 0.7);
+        }
+
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 10px rgba(255, 255, 255, 0.4); }
+          50% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.7); }
+        }
+
+        @keyframes particle {
+          0% { transform: translate(0, 0); opacity: 0; }
+          50% { transform: translate(20px, -20px); opacity: 1; }
+          100% { transform: translate(0, 0); opacity: 0; }
+        }
+
+        .animate-glow {
+          animation: glow 2s infinite ease-in-out;
+        }
+
+        .animate-particle {
+          animation: particle 1.5s infinite ease-in-out;
+        }
+
+        .delay-200 {
+          animation-delay: 0.2s;
+        }
+
+        .delay-400 {
+          animation-delay: 0.4s;
+        }
+
+        .perspective-1000 {
+          perspective: 1000px;
+        }
+
+        .transform-gpu {
+          transform-style: preserve-3d;
+          will-change: transform;
         }
       `}</style>
     </div>
