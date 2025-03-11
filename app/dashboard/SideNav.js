@@ -59,7 +59,7 @@ export default function SideNav({ user, userAvatar, isVisible }) {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          className="w-screen h-screen p-8 bg-transparent z-10 fixed flex flex-col items-center justify-center"
+          className="w-screen h-screen p-8 bg-transparent z-40 inset-0 fixed flex flex-col items-center justify-center"
         >
           <div className="absolute inset-0 bg-gradient-to-br from-teal-900/30 via-indigo-900/30 to-purple-900/30 backdrop-blur-2xl z-[-1]" />
 

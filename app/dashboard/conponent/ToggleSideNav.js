@@ -12,7 +12,7 @@ const toggleVariants = {
 export default function ToggleSideNav({ isVisible, toggleSidebar }) {
   return (
     <motion.div
-      className="fixed top-4 left-4 z-20"
+      className="fixed top-4 left-4 z-50"
       initial="rest"
       whileHover="hover"
       whileTap="tap"

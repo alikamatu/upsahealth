@@ -183,10 +183,6 @@ export default function SelfAssessment() {
         ) : (
           <motion.div
             key={currentQuestion.id}
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            exit={{ opacity: 0, y: -50 }}
             className="bg-white rounded-3xl shadow-2xl p-8 max-w-2xl w-full relative overflow-hidden"
           >
             {/* Subtle Background Gradient */}
