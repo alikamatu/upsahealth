@@ -1,34 +1,32 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useUserContext } from "../context/userContext";
-import AsessmentPhoto from "../assets/ass.jpg";
-import BlogPhoto from "../assets/community.jpg";
-import ChatPhoto from "../assets/chatcom.jpg";
-import BotPhoto from "../assets/aih.jpg";
-import LibraryPhoto from "../assets/lib.jpg";
-import ProfessionalPhoto from "../assets/professionals.png";
-import { FaArrowRight } from "react-icons/fa";
+import { FaArrowRight, FaBook, FaBrain, FaComments, FaHeart, FaRobot, FaUserMd } from "react-icons/fa";
 
 // Animation Variants
 const containerVariants = {
   hidden: { opacity: 0 },
-  visible: { 
-    opacity: 1, 
-    transition: { duration: 0.8, ease: "easeOut", staggerChildren: 0.15 } 
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.8, ease: "easeOut", staggerChildren: 0.15 },
   },
 };
 
 const cardVariants = {
   hidden: { opacity: 0, scale: 0.9, y: 30 },
   visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
-  hover: { scale: 1.03, transition: { duration: 0.3 } },
+  hover: { scale: 1.04, boxShadow: "0 10px 20px rgba(0, 0, 0, 0.1)", transition: { duration: 0.3 } },
 };
 
 const textVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+};
+
+const iconVariants = {
+  rest: { scale: 1, rotate: 0 },
+  hover: { scale: 1.2, rotate: 5, transition: { duration: 0.3, type: "spring", stiffness: 200 } },
 };
 
 export default function PageNav() {
@@ -37,45 +35,45 @@ export default function PageNav() {
   const cards = [
     {
       href: "/dashboard/self-assessment",
-      image: AsessmentPhoto,
+      icon: <FaBrain />,
       title: "Self-Assessment",
-      description: "Check in with yourself and track your journey.",
-      color: "from-teal-500 to-indigo-500",
+      description: "Take a moment to reflect and grow.",
+      color: "bg-gradient-to-br from-teal-400 to-indigo-400",
     },
     {
       href: "/dashboard/blog",
-      image: ChatPhoto,
+      icon: <FaComments />,
       title: "Write to the World",
-      description: "Share your story and spark inspiration.",
-      color: "from-indigo-500 to-purple-500",
+      description: "Express yourself and inspire others.",
+      color: "bg-gradient-to-br from-indigo-400 to-purple-400",
     },
     {
       href: "/dashboard/chatroom",
-      image: BlogPhoto,
+      icon: <FaHeart />,
       title: "Join the Community",
-      description: "Connect with others who get it.",
-      color: "from-purple-500 to-pink-500",
+      description: "Find your circle of support.",
+      color: "bg-gradient-to-br from-purple-400 to-pink-400",
     },
     {
       href: "/dashboard/library",
-      image: LibraryPhoto,
+      icon: <FaBook />,
       title: "Mindful Reads",
-      description: "Explore resources to lift your spirit.",
-      color: "from-pink-500 to-teal-500",
+      description: "Discover peace through knowledge.",
+      color: "bg-gradient-to-br from-pink-400 to-teal-400",
     },
     {
       href: "/dashboard/ai",
-      image: BotPhoto,
+      icon: <FaRobot />,
       title: "AI Companion",
-      description: "Instant support, anytime you need it.",
-      color: "from-teal-500 to-purple-500",
+      description: "Your friend for any moment.",
+      color: "bg-gradient-to-br from-teal-400 to-purple-400",
     },
     {
       href: "/dashboard/professionals",
-      image: ProfessionalPhoto,
+      icon: <FaUserMd />,
       title: "Find Experts",
-      description: "Reach out to pros who care.",
-      color: "from-indigo-500 to-pink-500",
+      description: "Connect with caring professionals.",
+      color: "bg-gradient-to-br from-indigo-400 to-pink-400",
     },
   ];
 
@@ -88,10 +86,12 @@ export default function PageNav() {
         animate="visible"
         className="max-w-7xl mx-auto mb-12 text-center"
       >
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 tracking-tight">
-          Hey <span className="text-teal-600">{user.username}</span>, what’s on your mind today?
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-800 tracking-tight">
+          Welcome, <span className="text-teal-600">{user.username}</span>
         </h1>
-        <p className="mt-3 text-lg text-gray-600 font-medium">Let’s make today count—pick your path.</p>
+        <p className="mt-3 text-lg text-gray-600 font-medium leading-relaxed">
+          Take a deep breath—your journey starts here.
+        </p>
       </motion.div>
 
       {/* Cards Grid */}
@@ -106,16 +106,19 @@ export default function PageNav() {
             <motion.div
               variants={cardVariants}
               whileHover="hover"
-              className="relative bg-white/90 backdrop-blur-lg rounded-3xl shadow-lg overflow-hidden border border-gray-100 h-[300px] md:h-[350px] flex flex-col"
+              className="relative bg-white/80 backdrop-blur-lg rounded-3xl shadow-md border border-teal-100/50 h-[300px] md:h-[320px] flex flex-col overflow-hidden"
             >
-              {/* Image */}
-              <div className="relative h-2/3">
-                <Image
-                  src={card.image}
-                  alt={card.title}
-                  className="object-cover w-full h-full brightness-75 transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className={`absolute inset-0 bg-gradient-to-t ${card.color} opacity-20 group-hover:opacity-30 transition-opacity duration-500`} />
+              {/* Gradient Icon Placeholder */}
+              <div className="relative h-2/3 flex items-center justify-center">
+                <motion.div
+                  variants={iconVariants}
+                  initial="rest"
+                  whileHover="hover"
+                  className={`${card.color} w-24 h-24 rounded-full flex items-center justify-center shadow-inner`}
+                >
+                  <span className="text-white text-4xl">{card.icon}</span>
+                </motion.div>
+                <div className="absolute inset-0 bg-gradient-to-t from-gray-900/10 to-transparent opacity-20 group-hover:opacity-30 transition-opacity duration-500" />
               </div>
 
               {/* Content */}
@@ -125,11 +128,11 @@ export default function PageNav() {
                   <p className="mt-2 text-sm text-gray-600 leading-relaxed">{card.description}</p>
                 </div>
                 <motion.div
-                  className="flex items-center gap-2 text-teal-600 font-medium mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                  className="flex items-center gap-2 text-teal-500 font-medium mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                   initial={{ x: -10 }}
                   animate={{ x: 0 }}
                 >
-                  Explore <FaArrowRight size={16} />
+                  Let’s Go <FaArrowRight size={16} />
                 </motion.div>
               </div>
             </motion.div>
@@ -137,18 +140,28 @@ export default function PageNav() {
         ))}
       </motion.div>
 
-      {/* Decorative Elements */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-0 left-0 w-64 h-64 bg-teal-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob" />
-        <div className="absolute bottom-0 right-0 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000" />
+      {/* Calming Animated Decorations */}
+      <div className="fixed inset-0 pointer-events-none z-[-1]">
+        <motion.div
+          className="absolute top-10 left-10 w-48 h-48 bg-teal-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20"
+          animate={{ y: [-20, 20, -20], transition: { duration: 10, repeat: Infinity, ease: "easeInOut" } }}
+        />
+        <motion.div
+          className="absolute bottom-10 right-10 w-48 h-48 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20"
+          animate={{ y: [20, -20, 20], transition: { duration: 12, repeat: Infinity, ease: "easeInOut" } }}
+        />
+        <motion.div
+          className="absolute top-1/2 left-1/2 w-64 h-64 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-15"
+          animate={{ scale: [1, 1.1, 1], transition: { duration: 8, repeat: Infinity, ease: "easeInOut" } }}
+        />
       </div>
 
       {/* Global Styles */}
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
         body {
-          font-family: 'Inter', sans-serif;
+          font-family: "Inter", sans-serif;
         }
 
         ::-webkit-scrollbar {
@@ -166,19 +179,6 @@ export default function PageNav() {
 
         ::-webkit-scrollbar-thumb:hover {
           background: rgba(85, 85, 85, 0.7);
-        }
-
-        @keyframes blob {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-20px); }
-        }
-
-        .animate-blob {
-          animation: blob 8s infinite;
-        }
-
-        .animation-delay-2000 {
-          animation-delay: 2s;
         }
       `}</style>
     </div>
