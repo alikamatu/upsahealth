@@ -46,7 +46,7 @@ export default function Home() {
         variants={heroVariants}
         initial="hidden"
         animate="visible"
-        className="relative w-full h-screen flex flex-col items-center justify-center text-center px-6 md:px-12 py-20 bg-[url('./assets/happy.jpg')] bg-cover bg-center bg-no-repeat bg-blend-overlay bg-teal-900/60"
+        className="relative w-full h-screen flex flex-col items-center justify-center text-center px-6 md:px-12 py-20 bg-[url('./assets/happy.jpg')] bg-cover bg-center bg-no-repeat bg-blend-overlay bg-teal-900/60 overflow-x-hidden"
       >
         {/* Logo */}
         <motion.div
