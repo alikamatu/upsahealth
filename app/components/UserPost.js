@@ -22,7 +22,9 @@ const UserPosts = () => {
   const [error, setError] = useState(null);
   
   const userContext = React.useContext(UserContext);
-  const userId = userContext?.user?._id;
+  const userId = localStorage.getItem("userId") || userContext.user?.id;
+  console.log(userId);
+  
 
   useEffect(() => {
     const fetchUserPosts = async () => {

@@ -153,7 +153,7 @@ export default function Blog() {
   const fetchPosts = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("https://healthbackend.vercel.app/api/post/fetchpost");
+      const response = await fetch("http://localhost:5000/api/post/fetchpost");
       if (response.ok) {
         const postData = await response.json();
         const formattedData = postData.map((post) => ({
