@@ -57,7 +57,7 @@ export default function DashboardLayout({ children }) {
         {/* SideNav with Animation */}
         <SideNav user={user} userAvatar={userAvatar} isVisible={isSidebarVisible} 
             toggleSidebar={toggleSidebar}
-            />
+        />
 
         {/* Main Content */}
         <div className="flex-grow p-0 justify-center items-center overflow-x-hidden">
