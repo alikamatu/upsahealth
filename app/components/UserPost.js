@@ -31,7 +31,7 @@ const UserPosts = () => {
       if (!userId) return;
 
       try {
-        const response = await axios.get(`http://localhost:5000/api/post/user/${userId}/posts`);
+        const response = await axios.get(`https://healthbackend.vercel.app/api/post/user/${userId}/posts`);
         // Filter posts by userId
         const userPosts = response.data.filter(post => post.userId === userId);
         setPosts(userPosts);

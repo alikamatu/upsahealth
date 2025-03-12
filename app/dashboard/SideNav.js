@@ -84,7 +84,9 @@ export default function SideNav({ user, userAvatar, isVisible, toggleSidebar }) 
                 />
                 <p className="text-lg font-semibold text-gray-100 tracking-wide">{user.profileName}</p>
                 </Link>
-                <Link href="/dashboard/edit">
+                <Link href="/dashboard/edit" 
+                      onClick={handleNavClick}
+                      >
                   <motion.button
                     whileHover={{ scale: 1.05, backgroundColor: "rgba(45, 212, 191, 0.3)" }}
                     whileTap={{ scale: 0.95 }}
