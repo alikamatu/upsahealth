@@ -117,14 +117,6 @@ const UserProfile = () => {
             <p className="text-sm text-teal-300">Posts</p>
             <p className="text-2xl font-bold">{postCount}</p>
           </div>
-          <div className="bg-indigo-900 p-4 rounded-xl shadow-lg backdrop-blur-md">
-            <p className="text-sm text-indigo-300">Followers</p>
-            <p className="text-2xl font-bold">{followers}</p>
-          </div>
-          <div className="bg-purple-900 p-4 rounded-xl shadow-lg backdrop-blur-md">
-            <p className="text-sm text-purple-300">Following</p>
-            <p className="text-2xl font-bold">{following}</p>
-          </div>
           <div className="bg-blue-900 p-4 rounded-xl shadow-lg backdrop-blur-md">
             <p className="text-sm text-blue-300">Age/Gender</p>
             <p className="text-2xl font-bold">
