@@ -47,24 +47,11 @@ const UserProfile = () => {
   const followers = user?.followers || 542;
   const following = user?.following || 128;
 
-  // Parallax effect with scroll
-  const { scrollY } = useScroll();
-  const yBackground = useTransform(scrollY, [0, 500], [0, -150]);
-
   return (
-    <div className="relative min-h-screen w-full overflow-x-hidden bg-gray-900 text-white">
+    <div className="relative w-full overflow-x-hidden bg-gray-900 text-white">
       {/* Dynamic Background */}
       <motion.div
-        style={{ y: yBackground }}
-        className="absolute inset-0 z-0 bg-gradient-to-br from-teal-600 via-indigo-700 to-purple-800 opacity-80"
-        animate={{
-          background: [
-            "linear-gradient(45deg, #00BCD4, #3F51B5, #9C27B0)",
-            "linear-gradient(45deg, #3F51B5, #9C27B0, #00BCD4)",
-            "linear-gradient(45deg, #9C27B0, #00BCD4, #3F51B5)",
-          ],
-        }}
-        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+        className="absolute inset-0 z-0 bg-gradient-to-br from-teal-100 via-indigo-100 to-purple-100"
       >
         <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay" />
       </motion.div>
@@ -90,17 +77,17 @@ const UserProfile = () => {
               alt={`${displayName}'s avatar`}
               layout="fill"
               objectFit="cover"
-              className="rounded-full border-8 border-teal-400/50 shadow-2xl"
+              className="rounded-full border-8 border-purple-700/50 shadow-2xl"
             />
             <motion.div
-              className="absolute inset-0 rounded-full border-4 border-teal-300/30"
+              className="absolute inset-0 rounded-full border-4 border-purple-600/30"
               animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
           </motion.div>
           <div className="text-center md:text-left">
             <motion.h1
-              className="text-4xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-200 to-purple-300"
+              className="text-4xl md:text-6xl font-extrabold tracking-tight text-gray-800 bg-gradient-to-r from-teal-600 to-purple-600 bg-clip-text text-transparent"
               variants={itemVariants}
             >
               {displayName}
@@ -115,7 +102,7 @@ const UserProfile = () => {
               className="text-md md:text-lg text-gray-400 italic mt-2 max-w-md"
               variants={itemVariants}
             >
-              "{bio}"
+              {bio}
             </motion.p>
           </div>
         </motion.div>

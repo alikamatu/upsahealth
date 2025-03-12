@@ -31,7 +31,7 @@ const UserPosts = () => {
       if (!userId) return;
 
       try {
-      const response = await axios.get("http://localhost:5000/api/post//user/:userId/posts");
+        const response = await axios.get(`http://localhost:5000/api/post/user/${userId}/posts`);
         // Filter posts by userId
         const userPosts = response.data.filter(post => post.userId === userId);
         setPosts(userPosts);
@@ -63,7 +63,7 @@ const UserPosts = () => {
   if (posts.length === 0) return <div className="text-center">No posts yet</div>;
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 p-4">
+    <div className="space-y-6 p-4">
       {posts.map(post => (
         <motion.div
           key={post._id}
