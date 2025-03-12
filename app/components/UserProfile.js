@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useUserProfile } from "../context/UserProfileContext";
 import { UserContext, useUserContext } from "../dashboard/context/userContext";
 import UserPosts from "./UserPost";
+import Link from "next/link";
 
 // Animation Variants
 const containerVariants = {
@@ -93,7 +94,7 @@ const UserProfile = () => {
               {displayName}
             </motion.h1>
             <motion.p
-              className="text-lg md:text-xl text-gray-300 mt-2"
+              className="text-lg md:text-xl text-gray-800 mt-2"
               variants={itemVariants}
             >
               {publicName}
@@ -112,19 +113,19 @@ const UserProfile = () => {
           className="w-full max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-6 mb-12"
           variants={itemVariants}
         >
-          <div className="bg-teal-900/50 p-4 rounded-xl shadow-lg backdrop-blur-md">
+          <div className="bg-teal-900 p-4 rounded-xl shadow-lg backdrop-blur-md">
             <p className="text-sm text-teal-300">Posts</p>
             <p className="text-2xl font-bold">{postCount}</p>
           </div>
-          <div className="bg-indigo-900/50 p-4 rounded-xl shadow-lg backdrop-blur-md">
+          <div className="bg-indigo-900 p-4 rounded-xl shadow-lg backdrop-blur-md">
             <p className="text-sm text-indigo-300">Followers</p>
             <p className="text-2xl font-bold">{followers}</p>
           </div>
-          <div className="bg-purple-900/50 p-4 rounded-xl shadow-lg backdrop-blur-md">
+          <div className="bg-purple-900 p-4 rounded-xl shadow-lg backdrop-blur-md">
             <p className="text-sm text-purple-300">Following</p>
             <p className="text-2xl font-bold">{following}</p>
           </div>
-          <div className="bg-blue-900/50 p-4 rounded-xl shadow-lg backdrop-blur-md">
+          <div className="bg-blue-900 p-4 rounded-xl shadow-lg backdrop-blur-md">
             <p className="text-sm text-blue-300">Age/Gender</p>
             <p className="text-2xl font-bold">
               {displayAge} / {displayGender}
@@ -134,7 +135,7 @@ const UserProfile = () => {
 
         {/* Action Buttons */}
         <motion.div
-          className="w-full max-w-5xl flex justify-center gap-6 mb-12"
+          className="w-full max-w-5xl flex justify-start gap-6 mb-12"
           variants={itemVariants}
         >
           <motion.button
@@ -142,20 +143,13 @@ const UserProfile = () => {
             whileTap={{ scale: 0.95 }}
             className="px-8 py-3 bg-teal-500 text-white rounded-full font-semibold shadow-lg hover:bg-teal-600 transition-all"
           >
-            Edit Profile
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.1, boxShadow: "0 0 15px rgba(63, 81, 181, 0.7)" }}
-            whileTap={{ scale: 0.95 }}
-            className="px-8 py-3 bg-indigo-500 text-white rounded-full font-semibold shadow-lg hover:bg-indigo-600 transition-all"
-          >
-            Follow
+            <Link href="/dashboard/edit">Edit Profile</Link>
           </motion.button>
         </motion.div>
 
         {/* User Posts */}
         <motion.div className="w-full max-w-5xl" variants={itemVariants}>
-          <h2 className="text-3xl font-bold text-teal-200 mb-6">Recent Posts</h2>
+          <h2 className="text-3xl font-bold text-teal-900 mb-6">Recent Posts</h2>
           <UserPosts />
         </motion.div>
       </motion.div>
