@@ -74,6 +74,7 @@ export default function SideNav({ user, userAvatar, isVisible, toggleSidebar }) 
                 animate={{ scale: 1, opacity: 1, transition: { delay: 0.4, duration: 0.6 } }}
                 className="flex flex-col items-center gap-4"
               >
+                <Link href="/dashboard/profile" className="flex flex-col items-center gap-2">
                 <Image
                   className="rounded-full object-cover border-4 border-teal-400/40 shadow-xl"
                   width={120}
@@ -82,6 +83,7 @@ export default function SideNav({ user, userAvatar, isVisible, toggleSidebar }) 
                   alt="User avatar"
                 />
                 <p className="text-lg font-semibold text-gray-100 tracking-wide">{user.profileName}</p>
+                </Link>
                 <Link href="/dashboard/edit">
                   <motion.button
                     whileHover={{ scale: 1.05, backgroundColor: "rgba(45, 212, 191, 0.3)" }}
