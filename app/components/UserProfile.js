@@ -1,85 +1,179 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { useUserProfile } from "../context/UserProfileContext";
-import { UserContext } from "../dashboard/context/userContext";
+import { UserContext, useUserContext } from "../dashboard/context/userContext";
+import UserPosts from "./UserPost";
 
-// Animation variants for the profile card
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { 
-      duration: 0.5, 
-      ease: "easeOut" 
-    }
-  }
+// Animation Variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      delayChildren: 0.3,
+    },
+  },
 };
 
-export default function UserProfile() {
-  // Get data from UserProfileContext
-  const { avatar, profileName, age, gender } = useUserProfile();
-  
-  // Get data from UserContext (from DashboardLayout)
-  const userContext = React.useContext(UserContext);
-  const user = userContext?.user;
-  const userAvatar = userContext?.userAvatar;
+const itemVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
 
-  // Combine data from both contexts, prioritizing UserProfileContext if available
-  const displayName = profileName || user?.profileName || "User";
-  const displayAvatar = avatar || userAvatar;
+const UserProfile = () => {
+  const { avatar, profileName, age, gender } = useUserProfile();
+  const userContext = React.useContext(UserContext);
+  const userAvatar = userContext?.userAvatar;
+  const {user} = useUserContext();
+
+  // Enhanced user data
+  const displayName = user.username || user?.profileName || "User";
+  const publicName = profileName || user?.profileName || "User";
+  const displayAvatar = avatar || userAvatar || "/default-avatar.jpg";
   const displayAge = age || user?.age || "Not specified";
   const displayGender = gender || user?.gender || "Not specified";
+  const bio = user?.bio || "Living the digital dream...";
+  const joinDate = user?.createdAt
+    ? new Date(user.createdAt).toLocaleDateString()
+    : "Unknown";
+  const postCount = user?.postCount || 0;
+  const followers = user?.followers || 542;
+  const following = user?.following || 128;
+
+  // Parallax effect with scroll
+  const { scrollY } = useScroll();
+  const yBackground = useTransform(scrollY, [0, 500], [0, -150]);
 
   return (
-    <motion.div
-      className="max-w-md mx-auto p-6 bg-white/90 dark:bg-gray-800/90 rounded-xl shadow-lg backdrop-blur-md border border-gray-200 dark:border-gray-700"
-      variants={cardVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      <div className="flex flex-col items-center gap-6">
-        {/* Avatar */}
+    <div className="relative min-h-screen w-full overflow-x-hidden bg-gray-900 text-white">
+      {/* Dynamic Background */}
+      <motion.div
+        style={{ y: yBackground }}
+        className="absolute inset-0 z-0 bg-gradient-to-br from-teal-600 via-indigo-700 to-purple-800 opacity-80"
+        animate={{
+          background: [
+            "linear-gradient(45deg, #00BCD4, #3F51B5, #9C27B0)",
+            "linear-gradient(45deg, #3F51B5, #9C27B0, #00BCD4)",
+            "linear-gradient(45deg, #9C27B0, #00BCD4, #3F51B5)",
+          ],
+        }}
+        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+      >
+        <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay" />
+      </motion.div>
+
+      {/* Main Content */}
+      <motion.div
+        className="relative z-10 min-h-screen flex flex-col items-center justify-start p-6 md:p-12"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {/* Header Section */}
         <motion.div
-          whileHover={{ scale: 1.05 }}
-          className="relative w-32 h-32"
+          className="w-full max-w-5xl flex flex-col md:flex-row items-center gap-8 mb-12"
+          variants={itemVariants}
         >
-          <Image
-            src={displayAvatar}
-            alt={`${displayName}'s avatar`}
-            layout="fill"
-            objectFit="cover"
-            className="rounded-full border-4 border-teal-400/40 shadow-md"
-          />
+          <motion.div
+            whileHover={{ scale: 1.05, rotate: 2 }}
+            className="relative w-48 h-48 md:w-64 md:h-64"
+          >
+            <Image
+              src={displayAvatar}
+              alt={`${displayName}'s avatar`}
+              layout="fill"
+              objectFit="cover"
+              className="rounded-full border-8 border-teal-400/50 shadow-2xl"
+            />
+            <motion.div
+              className="absolute inset-0 rounded-full border-4 border-teal-300/30"
+              animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
+          </motion.div>
+          <div className="text-center md:text-left">
+            <motion.h1
+              className="text-4xl md:text-6xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-200 to-purple-300"
+              variants={itemVariants}
+            >
+              {displayName}
+            </motion.h1>
+            <motion.p
+              className="text-lg md:text-xl text-gray-300 mt-2"
+              variants={itemVariants}
+            >
+              {publicName}
+            </motion.p>
+            <motion.p
+              className="text-md md:text-lg text-gray-400 italic mt-2 max-w-md"
+              variants={itemVariants}
+            >
+              "{bio}"
+            </motion.p>
+          </div>
         </motion.div>
 
-        {/* User Info */}
-        <div className="text-center space-y-3">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
-            {displayName}
-          </h2>
-          
-          <div className="space-y-2">
-            <p className="text-gray-600 dark:text-gray-300">
-              <span className="font-medium">Age:</span> {displayAge}
-            </p>
-            <p className="text-gray-600 dark:text-gray-300">
-              <span className="font-medium">Gender:</span> {displayGender}
+        {/* Stats Section */}
+        <motion.div
+          className="w-full max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-6 mb-12"
+          variants={itemVariants}
+        >
+          <div className="bg-teal-900/50 p-4 rounded-xl shadow-lg backdrop-blur-md">
+            <p className="text-sm text-teal-300">Posts</p>
+            <p className="text-2xl font-bold">{postCount}</p>
+          </div>
+          <div className="bg-indigo-900/50 p-4 rounded-xl shadow-lg backdrop-blur-md">
+            <p className="text-sm text-indigo-300">Followers</p>
+            <p className="text-2xl font-bold">{followers}</p>
+          </div>
+          <div className="bg-purple-900/50 p-4 rounded-xl shadow-lg backdrop-blur-md">
+            <p className="text-sm text-purple-300">Following</p>
+            <p className="text-2xl font-bold">{following}</p>
+          </div>
+          <div className="bg-blue-900/50 p-4 rounded-xl shadow-lg backdrop-blur-md">
+            <p className="text-sm text-blue-300">Age/Gender</p>
+            <p className="text-2xl font-bold">
+              {displayAge} / {displayGender}
             </p>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Edit Profile Button */}
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="px-6 py-2 bg-teal-500 text-white rounded-lg shadow-md hover:bg-teal-600 transition-colors"
+        {/* Action Buttons */}
+        <motion.div
+          className="w-full max-w-5xl flex justify-center gap-6 mb-12"
+          variants={itemVariants}
         >
-          Edit Profile
-        </motion.button>
-      </div>
-    </motion.div>
+          <motion.button
+            whileHover={{ scale: 1.1, boxShadow: "0 0 15px rgba(0, 188, 212, 0.7)" }}
+            whileTap={{ scale: 0.95 }}
+            className="px-8 py-3 bg-teal-500 text-white rounded-full font-semibold shadow-lg hover:bg-teal-600 transition-all"
+          >
+            Edit Profile
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1, boxShadow: "0 0 15px rgba(63, 81, 181, 0.7)" }}
+            whileTap={{ scale: 0.95 }}
+            className="px-8 py-3 bg-indigo-500 text-white rounded-full font-semibold shadow-lg hover:bg-indigo-600 transition-all"
+          >
+            Follow
+          </motion.button>
+        </motion.div>
+
+        {/* User Posts */}
+        <motion.div className="w-full max-w-5xl" variants={itemVariants}>
+          <h2 className="text-3xl font-bold text-teal-200 mb-6">Recent Posts</h2>
+          <UserPosts />
+        </motion.div>
+      </motion.div>
+    </div>
   );
 };
+
+export default UserProfile;

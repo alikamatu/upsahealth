@@ -3,8 +3,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { UserContext } from "../context/userContext";
 import { AiFillHeart, AiOutlineComment } from "react-icons/ai";
+import { UserContext } from "../dashboard/context/userContext";
 
 // Animation variants
 const postVariants = {
@@ -29,7 +29,7 @@ const UserPosts = () => {
       if (!userId) return;
 
       try {
-        const response = await axios.get("https://healthbackend.vercel.app/api/posts/fetchpost");
+      const response = await axios.get("http://localhost:5000/api/post//user/:userId/posts");
         // Filter posts by userId
         const userPosts = response.data.filter(post => post.userId === userId);
         setPosts(userPosts);
@@ -45,7 +45,7 @@ const UserPosts = () => {
 
   const handleLike = async (postId) => {
     try {
-      const response = await axios.post(`https://healthbackend.vercel.app/api/posts/${postId}/like`, {
+      const response = await axios.post(`http://localhost:5000/api/posts/${postId}/like`, {
         userId
       });
       setPosts(posts.map(post => 
