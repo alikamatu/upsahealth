@@ -39,9 +39,9 @@ export default function ChatRoom() {
   const messagesEndRef = useRef(null);
 
   const groupPhotos = {
-    General: "/avatars/avatar5.png",
-    Sports: "/avatars/avatar5.png",
-    Tech: "/avatars/avatar5.png",
+    General: "/chat/fun.jpeg",
+    Sports: "/chat/ball.png",
+    Tech: "/chat/ctech.jpeg",
   };
 
   // Socket setup and message handling
