@@ -39,7 +39,7 @@ const UserPosts = () => {
       }
 
       try {
-        const response = await axios.get(`https://healthbackend.vercel.app/api/posts/user/${userId}/posts`);
+        const response = await axios.get(`https://healthbackend.vercel.app/api/post/user/${userId}/posts`);
         setPosts(response.data); // Already filtered by userId in backend
       } catch (err) {
         setError("Failed to fetch posts");
