@@ -221,7 +221,7 @@ export default function SelfAssessment() {
     const userData = { userId, mood, emoji: moodEmoji[mood], responses };
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/user-mood", {
+      const response = await fetch("https://healthbackend.vercel.app/api/auth/user-mood", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
