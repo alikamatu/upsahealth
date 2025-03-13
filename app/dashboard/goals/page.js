@@ -47,7 +47,7 @@ const GoalsPage = () => {
       }
 
       try {
-        const response = await fetch(`http://localhost:5000/api/goals?userId=${userId}`, {
+        const response = await fetch(`https://healthbackend.vercel.app/api/goals?userId=${userId}`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         });
@@ -70,7 +70,7 @@ const GoalsPage = () => {
     if (!userId) return;
 
     try {
-      const response = await fetch("http://localhost:5000/api/goals", {
+      const response = await fetch("https://healthbackend.vercel.app/api/goals", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

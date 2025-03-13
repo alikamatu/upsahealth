@@ -39,7 +39,7 @@ const JournalPage = () => {
       }
 
       try {
-        const response = await fetch(`http://localhost:5000/api/journal?userId=${userId}`, {
+        const response = await fetch(`https://healthbackend.vercel.app/api/journal?userId=${userId}`, {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         });
@@ -61,7 +61,7 @@ const JournalPage = () => {
     if (!userId) return;
 
     try {
-      const response = await fetch("http://localhost:5000/api/journal", {
+      const response = await fetch("https://healthbackend.vercel.app/api/journal", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, entries: updatedEntries }),
