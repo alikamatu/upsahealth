@@ -98,7 +98,7 @@ export default function ChatRoom() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-indigo-50 to-purple-50 p-6 md:p-12 flex flex-col md:flex-row gap-8">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-indigo-50 to-purple-50 p-6 md:p-12 flex flex-col md:flex-row gap-8 justify-center items-center">
       {/* Groups Sidebar */}
       <motion.div
         variants={containerVariants}
@@ -134,7 +134,7 @@ export default function ChatRoom() {
       </motion.div>
 
       {/* Chat Window */}
-      <div className="w-full md:w-3/4 flex flex-col gap-6">
+      <div className="w-screen md:w-3/4 flex flex-col gap-6">
         <motion.div
           variants={containerVariants}
           initial="hidden"

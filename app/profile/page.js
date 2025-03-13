@@ -1,7 +1,8 @@
 "use client";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import "./Profile.scss"; // Ensure this path points to your CSS file
+import { motion, AnimatePresence } from "framer-motion";
+import "./Profile.scss"; // Keep your existing SCSS if needed
 
 const avatars = [
   "/avatars/avatar1.jpg",
@@ -11,23 +12,32 @@ const avatars = [
 ];
 
 const questions = [
-  { label: "Choose an Avatar", type: "avatar" },
+  { label: "Choose Your Avatar", type: "avatar" },
   { label: "Profile Name", type: "text" },
   { label: "Age", type: "number" },
   { label: "Gender", type: "select" },
 ];
 
-export default function ProfileSetup() {
+// Animation Variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.2, delayChildren: 0.3 },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+};
+
+const ProfileSetup = () => {
   const [avatar, setAvatar] = useState(null);
   const [age, setAge] = useState("");
   const [gender, setGender] = useState("");
   const [profileName, setProfileName] = useState("");
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [fadeClass, setFadeClass] = useState("fade-in");
-
-  useEffect(() => {
-    setFadeClass("fade-in");
-  }, [currentQuestionIndex]);
 
   const handleNext = () => {
     if (currentQuestionIndex < questions.length - 1) {
@@ -70,99 +80,174 @@ export default function ProfileSetup() {
   };
 
   return (
-    <form onSubmit={(e) => e.preventDefault()} className="p-4 w-screen h-screen overflow-hidden flex flex-col items-center justify-center gap-4 bg-[url('./dashboard/assets/wallpaper.png')] bg-cover">
-      <h2 className="text-2xl font-bold mb-4 text-start">Set Up Your Profile</h2>
+    <div className="relative min-h-screen w-full bg-gray-100 overflow-hidden flex items-center justify-center">
+      {/* Calm Wallpaper */}
+      <motion.div
+        className="absolute inset-0 z-0 bg-[url('/calm-wallpaper.jpg')] bg-cover bg-center opacity-70"
+        initial={{ scale: 1.1 }}
+        animate={{ scale: 1 }}
+        transition={{ duration: 2, ease: "easeOut" }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 to-purple-500/20" />
+      </motion.div>
 
-      {currentQuestionIndex === 0 && (
-        <div className={`mb-4 ${fadeClass}`}>
-          <label className="block">{questions[currentQuestionIndex].label}</label>
-          <div className="flex gap-2 mt-2 justify-center">
-            {avatars.map((img, index) => (
-              <Image
-                key={index}
-                src={img}
-                alt={`Avatar ${index + 1}`}
-                onClick={() => setAvatar(img)}
-                className={`cursor-pointer w-16 h-16 md:w-32 md:h-32 rounded-full border-2 ${avatar === img ? "border-blue-500" : "border-transparent"}`}
-                width={200}
-                height={200}
-                required
-              />
-            ))}
-          </div>
-          <button type="button" onClick={handleNext} className="w-full py-4 bg-blue-600 rounded-xl mt-10">
-            Next
-          </button>
-        </div>
-      )}
+      {/* Content */}
+      <motion.div
+        className="relative z-10 w-full max-w-md p-8 bg-white/90 rounded-2xl shadow-xl backdrop-blur-md border border-teal-200/50"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        <motion.h2
+          className="text-3xl font-bold text-teal-700 mb-6 text-center"
+          variants={itemVariants}
+        >
+          Set Up Your Safe Space
+        </motion.h2>
 
-      {currentQuestionIndex === 1 && (
-        <div className={`mb-4 ${fadeClass}`}>
-          <label className="block">{questions[currentQuestionIndex].label}</label>
-          <p className="text-red-600">Please do not use your real name. This name will be displayed publicly on the platform</p>
-          <input
-            type="text"
-            value={profileName}
-            onChange={(e) => setProfileName(e.target.value)}
-            className="border-2 border-gray-400 w-full mt-4 rounded-xl px-2 py-2 text-1xl focus:outline-none bg-transparent"
-            required
-          />
-          <div className="flex gap-2 mt-10">
-            <button type="button" onClick={handlePrevious} className="w-full py-4 bg-gray-600 rounded-xl text-white">
-              Back
-            </button>
-            <button type="button" onClick={handleNext} className="w-full py-4 bg-blue-600 rounded-xl text-white">
-              Next
-            </button>
-          </div>
-        </div>
-      )}
-
-      {currentQuestionIndex === 2 && (
-        <div className={`mb-4 ${fadeClass}`}>
-          <label className="block">{questions[currentQuestionIndex].label}</label>
-          <input
-            type="number"
-            value={age}
-            onChange={(e) => setAge(e.target.value)}
-            className="border-2 border-gray-400 w-full mt-4 rounded-xl px-2 py-2 text-1xl focus:outline-none bg-transparent"
-            required
-          />
-          <div className="flex gap-2 mt-10">
-            <button type="button" onClick={handlePrevious} className="w-full py-4 bg-gray-600 rounded-xl text-white">
-              Back
-            </button>
-            <button type="button" onClick={handleNext} className="w-full py-4 bg-blue-600 rounded-xl text-white">
-              Next
-            </button>
-          </div>
-        </div>
-      )}
-
-      {currentQuestionIndex === 3 && (
-        <div className={`mb-4 ${fadeClass}`}>
-          <label className="block">{questions[currentQuestionIndex].label}</label>
-          <select
-            value={gender}
-            onChange={(e) => setGender(e.target.value)}
-            className="w-full p-2 border rounded text-black"
-            required
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentQuestionIndex}
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            exit={{ opacity: 0, x: -50, transition: { duration: 0.3 } }}
+            className="space-y-6"
           >
-            <option value="">Select Gender</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-            <option value="Other">Other</option>
-          </select>
-          <div className="flex gap-2 mt-10">
-            <button type="button" onClick={handlePrevious} className="w-full py-4 bg-gray-600 rounded-xl text-white">
-              Back
-            </button>
-            <button type="button" onClick={handleNext} className="w-full py-4 bg-blue-600 rounded-xl text-white">
-              Submit
-            </button>
-          </div>
-        </div>
-      )}
-    </form>
+            {/* Avatar Selection */}
+            {currentQuestionIndex === 0 && (
+              <>
+                <label className="block text-lg font-medium text-gray-700">
+                  {questions[currentQuestionIndex].label}
+                </label>
+                <div className="flex gap-4 justify-center flex-wrap">
+                  {avatars.map((img, index) => (
+                    <motion.div
+                      key={index}
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setAvatar(img)}
+                      className={`cursor-pointer w-20 h-20 rounded-full border-4 ${
+                        avatar === img ? "border-teal-400" : "border-gray-300"
+                      } shadow-md`}
+                    >
+                      <Image
+                        src={img}
+                        alt={`Avatar ${index + 1}`}
+                        width={80}
+                        height={80}
+                        className="rounded-full"
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+              </>
+            )}
+
+            {/* Profile Name */}
+            {currentQuestionIndex === 1 && (
+              <>
+                <label className="block text-lg font-medium text-gray-700">
+                  {questions[currentQuestionIndex].label}
+                </label>
+                <p className="text-sm text-red-500 italic">
+                  Please use a pseudonym—this will be public!
+                </p>
+                <motion.input
+                  type="text"
+                  value={profileName}
+                  onChange={(e) => setProfileName(e.target.value)}
+                  className="w-full p-3 bg-teal-50/50 border border-teal-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 text-gray-800 placeholder-gray-500"
+                  placeholder="Enter your profile name"
+                  required
+                  whileFocus={{ scale: 1.02 }}
+                />
+              </>
+            )}
+
+            {/* Age */}
+            {currentQuestionIndex === 2 && (
+              <>
+                <label className="block text-lg font-medium text-gray-700">
+                  {questions[currentQuestionIndex].label}
+                </label>
+                <motion.input
+                  type="number"
+                  value={age}
+                  onChange={(e) => setAge(e.target.value)}
+                  className="w-full p-3 bg-teal-50/50 border border-teal-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 text-gray-800 placeholder-gray-500"
+                  placeholder="Enter your age"
+                  required
+                  whileFocus={{ scale: 1.02 }}
+                />
+              </>
+            )}
+
+            {/* Gender */}
+            {currentQuestionIndex === 3 && (
+              <>
+                <label className="block text-lg font-medium text-gray-700">
+                  {questions[currentQuestionIndex].label}
+                </label>
+                <motion.select
+                  value={gender}
+                  onChange={(e) => setGender(e.target.value)}
+                  className="w-full p-3 bg-teal-50/50 border border-teal-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 text-gray-800"
+                  required
+                  whileFocus={{ scale: 1.02 }}
+                >
+                  <option value="">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                  <option value="Prefer not to say">Prefer not to say</option>
+                </motion.select>
+              </>
+            )}
+
+            {/* Navigation Buttons */}
+            <div className="flex gap-4 mt-8">
+              {currentQuestionIndex > 0 && (
+                <motion.button
+                  type="button"
+                  onClick={handlePrevious}
+                  className="flex-1 py-3 bg-gray-500 text-white rounded-xl shadow-md hover:bg-gray-600 transition-colors"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Back
+                </motion.button>
+              )}
+              <motion.button
+                type="button"
+                onClick={handleNext}
+                className="flex-1 py-3 bg-teal-500 text-white rounded-xl shadow-md hover:bg-teal-600 transition-colors"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {currentQuestionIndex === questions.length - 1 ? "Submit" : "Next"}
+              </motion.button>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Progress Indicator */}
+        <motion.div
+          className="mt-6 flex justify-center gap-2"
+          variants={itemVariants}
+        >
+          {questions.map((_, index) => (
+            <div
+              key={index}
+              className={`w-3 h-3 rounded-full ${
+                index <= currentQuestionIndex ? "bg-teal-500" : "bg-gray-300"
+              }`}
+            />
+          ))}
+        </motion.div>
+      </motion.div>
+    </div>
   );
-}
+};
+
+export default ProfileSetup;

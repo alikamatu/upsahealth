@@ -1,13 +1,25 @@
 "use client";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaSmile, FaSadTear, FaMeh, FaHeart, FaArrowRight, FaCheckCircle, FaBook, FaPhone, FaLeaf } from "react-icons/fa";
-import VeryCalm from "./moodcomponents/VeryCalm";
+import { FaSmile, FaSadTear, FaMeh, FaHeart, FaArrowRight, FaCheckCircle, FaBook, FaPhone, FaLeaf, FaUserFriends } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
 // Animation Variants
 const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.15, delayChildren: 0.2 },
+  },
+};
+
+const itemVariants = {
   hidden: { opacity: 0, y: 50 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 150, damping: 15, mass: 0.8, duration: 0.6 },
+  },
 };
 
 const buttonVariants = {
@@ -25,9 +37,10 @@ const questions = [
   },
   {
     id: 2,
-    question: "How do you feel today?",
+    question: "How do you feel today? (Select all that apply)",
     options: ["Anxiety", "Depression", "Stress", "Confused", "Low Energy", "Mood Swing", "Happy", "Irritated", "Sad", "Calm"],
     type: "multiple-choice",
+    multiple: true,
     icon: <FaSadTear className="w-10 h-10 text-indigo-500" />,
   },
   {
@@ -48,76 +61,71 @@ const questions = [
     id: 5,
     question: "Have you ever faced a suicidal decision in your life?",
     options: ["Yes", "No", "Not Sure"],
+    type: "multiple-choice",
     icon: <FaSadTear className="w-10 h-10 text-purple-500" />,
   },
 ];
 
-// Result Page Component
-function ResultPage({ mood, onRestart }) {
+// Result Component
+function ResultPage({ mood, responses, onRestart }) {
+  const router = useRouter();
+
   const recommendations = {
     "Very Calm": [
-      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Practice mindfulness or meditation to maintain your calm state." },
-      { icon: <FaBook className="w-6 h-6 text-indigo-500" />, text: "Read a book on personal growth to keep nurturing your well-being." },
-      { icon: <FaSmile className="w-6 h-6 text-pink-500" />, text: "Share your positivity with others—connect with a friend!" },
+      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Practice mindfulness to stay grounded.", link: "/mindfulness" },
+      { icon: <FaBook className="w-6 h-6 text-indigo-500" />, text: "Set small goals.", link: "/dashboard/goals" },
+      { icon: <FaUserFriends className="w-6 h-6 text-pink-500" />, text: "Connect with friends.", link: "/chatroom" },
     ],
     "Calm": [
-      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Try a short breathing exercise to stay grounded." },
-      { icon: <FaHeart className="w-6 h-6 text-pink-500" />, text: "Engage in a hobby you love to sustain your calm mood." },
-      { icon: <FaBook className="w-6 h-6 text-indigo-500" />, text: "Explore mental health resources to build resilience." },
+      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Try a breathing exercise.", link: "/breathing" },
+      { icon: <FaHeart className="w-6 h-6 text-pink-500" />, text: "Engage in a favorite hobby.", link: "/activities" },
+      { icon: <FaBook className="w-6 h-6 text-indigo-500" />, text: "Read mental health resources.", link: "/library" },
     ],
     "Moderate": [
-      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Take a 10-minute walk to clear your mind." },
-      { icon: <FaBook className="w-6 h-6 text-indigo-500" />, text: "Journal your thoughts to process your feelings." },
-      { icon: <FaPhone className="w-6 h-6 text-purple-500" />, text: "Talk to a trusted friend or family member for support." },
+      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Take a short walk.", link: "/exercise" },
+      { icon: <FaBook className="w-6 h-6 text-indigo-500" />, text: "Journal your thoughts.", link: "/dashboard/journal" },
+      { icon: <FaPhone className="w-6 h-6 text-purple-500" />, text: "Talk to a friend.", link: "/community" },
     ],
     "High Stress": [
-      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Try deep breathing or progressive muscle relaxation." },
-      { icon: <FaPhone className="w-6 h-6 text-purple-500" />, text: "Reach out to a therapist or counselor for guidance." },
-      { icon: <FaBook className="w-6 h-6 text-indigo-500" />, text: "Set small, achievable goals to reduce overwhelm." },
+      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Try relaxation techniques.", link: "/relaxation" },
+      { icon: <FaPhone className="w-6 h-6 text-purple-500" />, text: "Contact a therapist.", link: "/professionals" },
+      { icon: <FaBook className="w-6 h-6 text-indigo-500" />, text: "Set small goals.", link: "/dashboard/goals" },
     ],
     "Severe Stress": [
-      { icon: <FaPhone className="w-6 h-6 text-purple-500" />, text: "Contact a mental health professional immediately." },
-      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Find a quiet space and focus on slow, deep breaths." },
-      { icon: <FaHeart className="w-6 h-6 text-pink-500" />, text: "Reach out to a loved one—you don’t have to face this alone." },
+      { icon: <FaPhone className="w-6 h-6 text-purple-500" />, text: "Seek professional help now.", link: "/professionals" },
+      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Focus on deep breathing.", link: "/breathing" },
+      { icon: <FaHeart className="w-6 h-6 text-pink-500" />, text: "Reach out to a loved one.", link: "/community" },
     ],
   };
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      className="bg-white rounded-3xl shadow-2xl p-8 max-w-lg w-full text-center relative overflow-hidden"
-    >
-      {/* Subtle Gradient Overlay */}
+    <motion.div variants={containerVariants} initial="hidden" animate="visible" className="bg-white rounded-3xl shadow-2xl p-8 max-w-lg w-full text-center relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-teal-50 to-purple-50 opacity-30 rounded-3xl" />
       <div className="relative z-10">
         <FaCheckCircle className="w-16 h-16 text-teal-500 mx-auto mb-6" />
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Your Mood: {mood}</h2>
+        <h2 className="text-3xl font-bold text-gray-900 mb-2">Your Mood: {mood.mood}</h2>
         <p className="text-gray-600 mb-6">
-          {mood === "Severe Stress" || mood === "High Stress"
-            ? "We’re here for you. Take a moment to prioritize your well-being."
-            : "Thanks for checking in! Here’s how you can nurture yourself next."}
+          {mood.mood === "Severe Stress" || mood.mood === "High Stress"
+            ? "You’re not alone—let’s take care of you."
+            : "Here’s how to nurture your mind today."}
         </p>
-
-        {/* Recommendations */}
         <div className="space-y-4 mb-8">
-          <h3 className="text-lg font-semibold text-gray-800">What You Can Do Next</h3>
-          {recommendations[mood].map((rec, index) => (
+          <h3 className="text-lg font-semibold text-gray-800">Suggestions for You</h3>
+          {recommendations[mood.mood].map((rec, index) => (
             <motion.div
               key={index}
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.2 }}
-              className="flex items-center gap-4 p-3 bg-gray-50 rounded-xl shadow-sm"
+              className="flex items-center gap-4 p-3 bg-gray-50 rounded-xl shadow-sm cursor-pointer hover:bg-gray-100"
+              onClick={() => router.push(rec.link)}
             >
               <div className="p-2 bg-white rounded-full shadow-md">{rec.icon}</div>
               <p className="text-gray-700 text-sm">{rec.text}</p>
+              <FaArrowRight className="ml-auto text-teal-500" />
             </motion.div>
           ))}
         </div>
-
-        {/* Restart Button */}
         <motion.button
           variants={buttonVariants}
           whileHover="hover"
@@ -133,62 +141,133 @@ function ResultPage({ mood, onRestart }) {
 }
 
 export default function SelfAssessment() {
+  const router = useRouter();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);
+  const [error, setError] = useState(null);
 
-  const handleAnswer = (value) => {
-    const updatedAnswers = { ...answers, [questions[currentQuestionIndex].id]: value };
-    setAnswers(updatedAnswers);
-
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
+  const handleAnswer = (option) => {
+    const currentQuestion = questions[currentQuestionIndex];
+    if (currentQuestion.multiple) {
+      const currentAnswers = answers[currentQuestion.id] || [];
+      const newAnswers = currentAnswers.includes(option)
+        ? currentAnswers.filter((ans) => ans !== option)
+        : [...currentAnswers, option];
+      setAnswers({ ...answers, [currentQuestion.id]: newAnswers });
     } else {
-      calculateResult(updatedAnswers);
+      setAnswers({ ...answers, [currentQuestion.id]: option });
+      if (currentQuestionIndex < questions.length - 1) {
+        setCurrentQuestionIndex(currentQuestionIndex + 1);
+      } else {
+        calculateResult({ ...answers, [currentQuestion.id]: option });
+      }
     }
   };
 
-  const calculateResult = (responses) => {
-    const totalScore = Object.values(responses).reduce((acc, curr) => {
-      if (typeof curr === "number") return acc + curr;
-      if (typeof curr === "string") {
-        if (curr === "Calm" || curr === "Happy") return acc + 1;
-        if (curr === "Anxiety" || curr === "Depression" || curr === "Stress") return acc + 3;
-        if (curr === "Yes" || curr === "Always") return acc + 10;
-      }
-      return acc;
-    }, 0);
+  const handleNext = () => {
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1);
+    } else {
+      calculateResult(answers);
+    }
+  };
 
-    let mood;
+  const calculateResult = async (responses) => {
+    let totalScore = 0;
+
+    Object.entries(responses).forEach(([questionId, response]) => {
+      const question = questions.find((q) => q.id === parseInt(questionId));
+      if (question.type === "rating" && typeof response === "number") {
+        totalScore += response;
+      } else if (question.type === "multiple-choice") {
+        if (Array.isArray(response)) {
+          response.forEach((res) => {
+            if (["Anxiety", "Depression", "Stress", "Irritated", "Sad"].includes(res)) totalScore += 3;
+            if (["Happy", "Calm"].includes(res)) totalScore -= 1;
+            if (res === "Mood Swing" || res === "Confused" || res === "Low Energy") totalScore += 2;
+          });
+        } else {
+          if (response === "Yes" || response === "Always") totalScore += 10;
+          if (response === "Sometimes" || response === "Often") totalScore += 5;
+        }
+      }
+    });
+
+    let mood = "Moderate";
     if (totalScore <= 5) mood = "Very Calm";
     else if (totalScore <= 10) mood = "Calm";
-    else if (totalScore <= 15) mood = "Moderate";
-    else if (totalScore <= 20) mood = "High Stress";
+    else if (totalScore <= 20) mood = "Moderate";
+    else if (totalScore <= 30) mood = "High Stress";
     else mood = "Severe Stress";
 
-    setResult(mood);
+    const moodEmoji = {
+      "Very Calm": "😊",
+      "Calm": "🙂",
+      "Moderate": "😐",
+      "High Stress": "😟",
+      "Severe Stress": "😢",
+    };
+
+    const userData = { mood, emoji: moodEmoji[mood], responses };
+
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/user-mood", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to save mood data: ${response.status} - ${errorText}`);
+      }
+      console.log("Mood data saved successfully!");
+    } catch (error) {
+      console.error("Error posting data:", error.message);
+      setError(error.message); // Store error for display
+    }
+
+    setResult({ mood, responses });
   };
 
   const currentQuestion = questions[currentQuestionIndex];
 
-  if (result === "Very Calm" && false) { // Disable VeryCalm redirect for now
-    return <VeryCalm />;
-  }
-
   return (
-    <div className="min-h-screen w-screen bg-gradient-to-br from-teal-50 via-indigo-50 to-purple-50 flex items-center justify-center p-6">
-      <AnimatePresence mode="wait">
-        {result ? (
-          <ResultPage key="result" mood={result} onRestart={() => window.location.reload()} />
-        ) : (
-          <motion.div
-            key={currentQuestion.id}
-            className="bg-white rounded-3xl shadow-2xl p-8 max-w-2xl w-full relative overflow-hidden"
-          >
-            {/* Subtle Background Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-br from-teal-50 to-purple-50 opacity-30 rounded-3xl" />
-            <div className="relative z-10">
-              {/* Progress Bar */}
+    <div className="min-h-screen w-screen bg-[url('/calm-wallpaper.jpg')] bg-cover bg-center flex items-center justify-center p-6 relative">
+      {/* Subtle Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 to-purple-500/20" />
+
+      {error && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="absolute top-4 left-1/2 transform -translate-x-1/2 bg-red-100 text-red-700 p-4 rounded-xl shadow-md z-20"
+        >
+          {error}
+        </motion.div>
+      )}
+
+      <motion.div variants={containerVariants} initial="hidden" animate="visible">
+        <AnimatePresence mode="wait">
+          {result ? (
+            <ResultPage
+              key="result"
+              mood={result}
+              responses={answers}
+              onRestart={() => {
+                setAnswers({});
+                setResult(null);
+                setCurrentQuestionIndex(0);
+                setError(null); // Clear error on restart
+              }}
+            />
+          ) : (
+            <motion.div
+              key={currentQuestion.id}
+              variants={itemVariants}
+              className="bg-white/90 rounded-3xl shadow-2xl p-8 max-w-2xl w-full relative overflow-hidden backdrop-blur-md border border-teal-200/50"
+            >
               <div className="w-full h-2 bg-gray-200 rounded-full mb-6">
                 <motion.div
                   className="h-full bg-gradient-to-r from-teal-500 to-indigo-500 rounded-full"
@@ -197,12 +276,14 @@ export default function SelfAssessment() {
                   transition={{ duration: 0.5 }}
                 />
               </div>
-
-              {/* Question Content */}
               <div className="flex flex-col items-center gap-8">
-                <div className="p-4 bg-gradient-to-r from-teal-100 to-purple-100 rounded-full shadow-md">
+                <motion.div
+                  className="p-4 bg-gradient-to-r from-teal-100 to-purple-100 rounded-full shadow-md"
+                  animate={{ rotate: [0, 5, -5, 0] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
                   {currentQuestion.icon}
-                </div>
+                </motion.div>
                 <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 text-center leading-tight">
                   {currentQuestion.question}
                 </h2>
@@ -214,20 +295,33 @@ export default function SelfAssessment() {
                       variants={buttonVariants}
                       whileHover="hover"
                       whileTap="tap"
-                      className="relative bg-white p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-gray-100 group"
+                      className={`relative p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border ${
+                        currentQuestion.multiple && answers[currentQuestion.id]?.includes(option)
+                          ? "bg-teal-100 border-teal-400"
+                          : "bg-white border-gray-100"
+                      } group`}
                     >
                       <div className="absolute inset-0 bg-gradient-to-r from-teal-100 to-purple-100 opacity-0 group-hover:opacity-20 transition-opacity duration-300 rounded-xl" />
-                      <span className="relative text-gray-700 font-medium text-sm md:text-base">
-                        {option}
-                      </span>
+                      <span className="relative text-gray-700 font-medium text-sm md:text-base">{option}</span>
                     </motion.button>
                   ))}
                 </div>
+                {currentQuestion.multiple && (
+                  <motion.button
+                    onClick={handleNext}
+                    variants={buttonVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                    className="mt-4 bg-teal-500 text-white px-6 py-3 rounded-full shadow-md"
+                  >
+                    {currentQuestionIndex === questions.length - 1 ? "Finish" : "Next"}
+                  </motion.button>
+                )}
               </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </motion.div>
 
       {/* Global Styles */}
       <style jsx global>{`

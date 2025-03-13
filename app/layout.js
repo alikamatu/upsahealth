@@ -35,7 +35,7 @@ export default function RootLayout({ children }) {
       <UserProfileProvider>
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} antialiased text-black`}
       >
         {children}
       </body>

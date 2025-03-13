@@ -2,25 +2,29 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { useUserContext } from "../context/userContext";
-import { FaArrowRight, FaBook, FaBrain, FaComments, FaHeart, FaRobot, FaUserMd } from "react-icons/fa";
+import { FaArrowRight, FaBook, FaBrain, FaComments, FaHeart, FaRobot, FaUserMd, FaPen } from "react-icons/fa";
 
 // Animation Variants
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { duration: 0.8, ease: "easeOut", staggerChildren: 0.2 },
+    transition: { staggerChildren: 0.15, delayChildren: 0.2 },
   },
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, scale: 0.8, rotateX: 20, y: 50 },
+  hidden: { opacity: 0, y: 50 },
   visible: {
     opacity: 1,
-    scale: 1,
-    rotateX: 0,
     y: 0,
-    transition: { duration: 0.7, ease: "easeOut", type: "spring", stiffness: 100 },
+    transition: {
+      type: "spring",
+      stiffness: 150,
+      damping: 15,
+      mass: 0.8,
+      duration: 0.6,
+    },
   },
   hover: {
     scale: 1.05,
@@ -32,7 +36,11 @@ const cardVariants = {
 
 const textVariants = {
   hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 100, damping: 20, duration: 0.6 },
+  },
 };
 
 export default function PageNav() {
@@ -81,6 +89,20 @@ export default function PageNav() {
       description: "Guidance from the heart.",
       color: "bg-gradient-to-br from-blue-500 to-blue-700", // Blue: Trust, expertise
     },
+    {
+      href: "/dashboard/journal",
+      icon: <FaPen />,
+      title: "Journal Your Thoughts",
+      description: "Reflect and find peace within.",
+      color: "bg-gradient-to-br from-indigo-600 to-indigo-800", // Indigo: Reflection, depth
+    },
+    {
+      href: "/dashboard/goals",
+      icon: <FaBook />,
+      title: "Set Your Goals",
+      description: "Take small steps to thrive.",
+      color: "bg-gradient-to-br from-teal-600 to-teal-800", // Teal: Growth, calm
+    },
   ];
 
   return (
@@ -105,7 +127,7 @@ export default function PageNav() {
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
+        className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10"
       >
         {cards.map((card, index) => (
           <Link key={index} href={card.href} className="group">
