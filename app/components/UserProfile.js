@@ -58,7 +58,7 @@ const UserProfile = () => {
   const fetchMood = async () => {
     setIsLoadingMood(true);
     try {
-      const response = await axios.get(`http://healthbackend.vercel.app/api/auth/fetch-mood?userId=${userId}`);
+        const response = await axios.get(`https://healthbackend.vercel.app/api/auth/fetch-mood?userId=${userId}`);
   
       setUserMood(response.data.mood || "Not specified");
     } catch (err) {
