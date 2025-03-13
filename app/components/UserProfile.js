@@ -53,12 +53,12 @@ const UserProfile = () => {
     : "Unknown";
   const postCount = user?.postCount || 0;
 
-  const userId = "672d490afb764724c7baf03a"; // Replace this with the actual user ID (get it from context or localStorage)
+  const userId = localStorage.getItem("userId"); // Replace this with the actual user ID (get it from context or localStorage)
   
   const fetchMood = async () => {
     setIsLoadingMood(true);
     try {
-      const response = await axios.get(`http://localhost:5000/api/auth/fetch-mood?userId=${userId}`);
+      const response = await axios.get(`http://healthbackend.vercel.app/api/auth/fetch-mood?userId=${userId}`);
   
       setUserMood(response.data.mood || "Not specified");
     } catch (err) {
