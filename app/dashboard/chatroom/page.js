@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useUserContext } from "../context/userContext";
 import { FaPaperPlane, FaSpinner } from "react-icons/fa";
 
-const socket = io("https://healthbackend-1.onrender.com");
+const socket = io("http://localhost:5000");
 
 // Animation Variants
 const containerVariants = {
