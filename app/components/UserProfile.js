@@ -1,11 +1,13 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { useUserProfile } from "../context/UserProfileContext";
 import { UserContext, useUserContext } from "../dashboard/context/userContext";
 import UserPosts from "./UserPost";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 // Animation Variants
 const containerVariants = {
@@ -31,12 +33,17 @@ const itemVariants = {
 const UserProfile = () => {
   const { avatar, profileName, age, gender } = useUserProfile();
   const userContext = React.useContext(UserContext);
+  const { user } = useUserContext();
   const userAvatar = userContext?.userAvatar;
-  const {user} = useUserContext();
+  const router = useRouter();
+
+  // State for mood
+  const [userMood, setUserMood] = useState("Not specified");
+  const [isLoadingMood, setIsLoadingMood] = useState(false);
+  const [error, setError] = useState(null);
 
   // Enhanced user data
   const displayName = user.username || user?.profileName || "User";
-  const publicName = profileName || user?.profileName || "User";
   const displayAvatar = avatar || userAvatar || "/default-avatar.jpg";
   const displayAge = age || user?.age || "Not specified";
   const displayGender = gender || user?.gender || "Not specified";
@@ -45,15 +52,39 @@ const UserProfile = () => {
     ? new Date(user.createdAt).toLocaleDateString()
     : "Unknown";
   const postCount = user?.postCount || 0;
-  const followers = user?.followers || 542;
-  const following = user?.following || 128;
+
+  const userId = "672d490afb764724c7baf03a"; // Replace this with the actual user ID (get it from context or localStorage)
+  
+  const fetchMood = async () => {
+    setIsLoadingMood(true);
+    try {
+      const response = await axios.get(`http://localhost:5000/api/auth/fetch-mood?userId=${userId}`);
+  
+      setUserMood(response.data.mood || "Not specified");
+    } catch (err) {
+      setError(err.response?.data?.error || "Failed to fetch mood");
+      setUserMood("Mood unavailable");
+    } finally {
+      setIsLoadingMood(false);
+    }
+  };
+  
+  useEffect(() => {
+    fetchMood();
+  }, []);
+
+
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.href = "/";
+  };
+  
+
 
   return (
     <div className="relative w-full overflow-x-hidden bg-gray-900 text-white">
       {/* Dynamic Background */}
-      <motion.div
-        className="absolute inset-0 z-0 bg-gradient-to-br from-teal-100 via-indigo-100 to-purple-100"
-      >
+      <motion.div className="absolute inset-0 z-0 bg-gradient-to-br from-teal-100 via-indigo-100 to-purple-100">
         <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay" />
       </motion.div>
 
@@ -97,7 +128,7 @@ const UserProfile = () => {
               className="text-lg md:text-xl text-gray-800 mt-2"
               variants={itemVariants}
             >
-              {publicName}
+              {profileName || user?.profileName || "User"}
             </motion.p>
             <motion.p
               className="text-md md:text-lg text-gray-400 italic mt-2 max-w-md"
@@ -108,7 +139,7 @@ const UserProfile = () => {
           </div>
         </motion.div>
 
-        {/* Stats Section */}
+        {/* Stats Section with Mood */}
         <motion.div
           className="w-full max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-6 mb-12"
           variants={itemVariants}
@@ -123,9 +154,15 @@ const UserProfile = () => {
               {displayAge} / {displayGender}
             </p>
           </div>
+          <div className="bg-purple-900 p-4 rounded-xl shadow-lg backdrop-blur-md">
+            <p className="text-sm text-purple-300">Current Mood</p>
+            <p className="text-2xl font-bold">
+              {isLoadingMood ? "Loading..." : userMood}
+            </p>
+          </div>
         </motion.div>
 
-        {/* Action Buttons */}
+        {/* Action Buttons with Logout */}
         <motion.div
           className="w-full max-w-5xl flex justify-start gap-6 mb-12"
           variants={itemVariants}
@@ -137,6 +174,14 @@ const UserProfile = () => {
           >
             <Link href="/dashboard/edit">Edit Profile</Link>
           </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1, boxShadow: "0 0 15px rgba(239, 68, 68, 0.7)" }}
+            whileTap={{ scale: 0.95 }}
+            onClick={handleLogout}
+            className="px-8 py-3 bg-red-500 text-white rounded-full font-semibold shadow-lg hover:bg-red-600 transition-all"
+          >
+            Logout
+          </motion.button>
         </motion.div>
 
         {/* User Posts */}
@@ -144,6 +189,16 @@ const UserProfile = () => {
           <h2 className="text-3xl font-bold text-teal-900 mb-6">Recent Posts</h2>
           <UserPosts />
         </motion.div>
+
+        {/* Error Display */}
+        {error && (
+          <motion.div
+            className="w-full max-w-5xl text-red-500 text-center"
+            variants={itemVariants}
+          >
+            {error}
+          </motion.div>
+        )}
       </motion.div>
     </div>
   );

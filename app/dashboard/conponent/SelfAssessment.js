@@ -173,6 +173,14 @@ export default function SelfAssessment() {
     }
   };
 
+  const userId = localStorage.getItem("userId");
+
+  if (!userId) {
+    console.error("User ID not found in localStorage");
+    router.push("/login"); // Redirect to login page
+    return null; // Stop rendering the component
+  }
+
   const calculateResult = async (responses) => {
     let totalScore = 0;
 
@@ -209,7 +217,8 @@ export default function SelfAssessment() {
       "Severe Stress": "😢",
     };
 
-    const userData = { mood, emoji: moodEmoji[mood], responses };
+    // Include userId from localStorage in the request body
+    const userData = { userId, mood, emoji: moodEmoji[mood], responses };
 
     try {
       const response = await fetch("http://localhost:5000/api/auth/user-mood", {
