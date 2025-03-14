@@ -78,7 +78,7 @@ export default function Home() {
                 Sign In
               </motion.button>
             </Link>
-            <Link href="/signup">
+            <Link href="/login">
               <motion.button
                 variants={buttonVariants}
                 whileHover="hover"
