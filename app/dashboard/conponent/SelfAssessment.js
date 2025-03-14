@@ -78,11 +78,11 @@ function ResultPage({ mood, responses, onRestart }) {
     ],
     "Calm": [
       { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Try a breathing exercise.", link: "/breathing" },
-      { icon: <FaHeart className="w-6 h-6 text-pink-500" />, text: "Engage in a favorite hobby.", link: "/blogs" },
+      { icon: <FaHeart className="w-6 h-6 text-pink-500" />, text: "Reach out the world.", link: "/blog" },
       { icon: <FaBook className="w-6 h-6 text-indigo-500" />, text: "Read mental health resources.", link: "/library" },
     ],
     "Moderate": [
-      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Take a short walk.", link: "/exercise" },
+      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Read mental health resources.", link: "/library" },
       { icon: <FaBook className="w-6 h-6 text-indigo-500" />, text: "Journal your thoughts.", link: "/dashboard/journal" },
       { icon: <FaPhone className="w-6 h-6 text-purple-500" />, text: "Talk to a friend.", link: "/community" },
     ],
@@ -93,7 +93,7 @@ function ResultPage({ mood, responses, onRestart }) {
     ],
     "Severe Stress": [
       { icon: <FaPhone className="w-6 h-6 text-purple-500" />, text: "Seek professional help now.", link: "/professionals" },
-      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Focus on deep breathing.", link: "/blogs" },
+      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Reach out the world", link: "/blog" },
       { icon: <FaHeart className="w-6 h-6 text-pink-500" />, text: "Reach out to a loved one.", link: "/community" },
     ],
   };
