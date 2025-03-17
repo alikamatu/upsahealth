@@ -60,7 +60,7 @@ export default function Home() {
         {/* Main Content */}
         <div className="max-w-3xl z-10">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight drop-shadow-md">
-            Your Safe Space for Mental Wellness
+            Your Safe Space for Mental Wellness!
           </h1>
           <p className="text-lg md:text-xl text-gray-200 mb-8 drop-shadow-sm">
             Discover a community and tools to support your journey toward peace and resilience.
