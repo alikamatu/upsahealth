@@ -7,7 +7,7 @@ import { FaPaperPlane, FaSpinner, FaExclamationCircle, FaRedo, FaPlus } from "re
 import ReactMarkdown from "react-markdown";
 
 // Dynamic base URL
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "https://healthbackend";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -55,7 +55,7 @@ export default function AI() {
 
     const testConnection = async () => {
       try {
-        const response = await axios.post("http://localhost:5000/api/gemini", { prompt: "Test connection" });
+        const response = await axios.post("https://healthbackend/api/gemini", { prompt: "Test connection" });
         console.log("Gemini AI test response:", response.data.content);
         setError(null);
       } catch (err) {
@@ -79,7 +79,7 @@ export default function AI() {
     const fetchConversations = async () => {
       try {
         const userId = localStorage.getItem("userId") || "guest";
-        const response = await axios.get(`http://localhost:5000/api/conversations/${userId}`);
+        const response = await axios.get(`https://healthbackend/api/conversations/${userId}`);
         console.log("Fetched conversations:", response.data);
         setConversations(response.data);
         if (response.data.length > 0) {
@@ -111,7 +111,7 @@ export default function AI() {
 
     try {
       console.log("Sending message to Gemini AI:", input);
-      const response = await axios.post("http://localhost:5000/api/gemini", { prompt: input });
+      const response = await axios.post("https://healthbackend/api/gemini", { prompt: input });
       console.log("Received response from Gemini AI:", response.data);
 
       const sanitizedContent = response.data.content.replace(/[*_~`]/g, "");
@@ -132,10 +132,10 @@ export default function AI() {
         })),
       };
 
-      await api.post("/api/conversations", conversationData);
+      await axios.post("https://healthbackend/api/conversations", conversationData);
       console.log("Conversation saved successfully");
 
-      const updatedConversations = await api.get(`/api/conversations/${localStorage.getItem("userId") || "guest"}`);
+      const updatedConversations = await api.get(`https://healthbackend/api/conversations/${localStorage.getItem("userId") || "guest"}`);
       setConversations(updatedConversations.data);
     } catch (error) {
       console.error("API Error:", error.response?.data || error.message);
