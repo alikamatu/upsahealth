@@ -30,13 +30,13 @@ export const metadata = {
     "Access mental health resources, self-assessment tools, and expert guidance to improve well-being. Join our supportive community today.",
   keywords:
     "mental health, wellness, therapy, self-care, mental health support, online therapy, counseling, stress management, mental health resources",
-  author: "UPSA Health Team",
+  author: "Alikamatu Osama",
   robots: "index, follow",
   openGraph: {
     title: "Mental Health Support & Resources | UPSA Health",
     description:
       "Explore expert mental health guidance, self-assessment tools, and a supportive community to improve your well-being.",
-    url: "https://yourwebsite.com", // Replace with actual website URL
+    url: "https://upsamentalhealth.vercel.app",
     type: "website",
     images: [
       {
