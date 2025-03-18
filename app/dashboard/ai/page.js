@@ -5,14 +5,17 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useUserContext } from "../context/userContext";
 import { FaPaperPlane, FaSpinner, FaExclamationCircle, FaRedo } from "react-icons/fa";
 
-// Dynamic base URL
-const BASE_URL = process.env.NODE_ENV === "development" ? "http://localhost:5000" : "https://healthbackend.vercel.app";
+// Dynamic base URL based on environment
+const BASE_URL =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:5000"
+    : "https://healthbackend.vercel.app";
 
 const api = axios.create({
   baseURL: BASE_URL,
-  withCredentials: true,
+  withCredentials: true, // For session cookies if needed
   headers: { "Content-Type": "application/json" },
-  timeout: 5000,
+  timeout: 10000, // Increased timeout for AI response
 });
 
 // Animation Variants
@@ -40,6 +43,7 @@ export default function AI() {
   const [retryCount, setRetryCount] = useState(0);
   const messagesEndRef = useRef(null);
 
+  // Initial message and connection test
   useEffect(() => {
     setMessages([
       {
@@ -51,15 +55,16 @@ export default function AI() {
 
     const testConnection = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/chat/test");
-        console.log("Backend connection test:", response.data);
+        // Test the /api/gemini endpoint with a simple prompt
+        const response = await api.post("/api/gemini", { prompt: "Test connection" });
+        console.log("Gemini AI test response:", response.data.content);
         setError(null);
       } catch (err) {
         console.error("Backend connection test failed:", err);
         setError(
           err.code === "ECONNABORTED"
             ? "Server timed out—retrying soon!"
-            : "Can’t reach the server. Is it running at " + BASE_URL + "?"
+            : `Can’t reach the AI at ${BASE_URL}. Check the server!`
         );
         if (retryCount < 3) {
           setTimeout(() => setRetryCount((prev) => prev + 1), 3000);
@@ -70,10 +75,12 @@ export default function AI() {
     testConnection();
   }, [user, retryCount]);
 
+  // Scroll to the latest message
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Send message to the backend /api/gemini endpoint
   const handleSendMessage = async () => {
     if (!input.trim() || loading) return;
     setError(null);
@@ -84,15 +91,13 @@ export default function AI() {
     setLoading(true);
 
     try {
-      console.log("Sending message to backend:", input);
-      const response = await axios.post("http://localhost:5000/api/chat", {
-        messages: [{ role: "user", content: input }],
-      });
-      console.log("Received response:", response.data);
+      console.log("Sending message to Gemini AI:", input);
+      const response = await api.post("/api/gemini", { prompt: input });
+      console.log("Received response from Gemini AI:", response.data);
 
       const aiMessage = {
         id: messages.length + 2,
-        text: response.data.content?.[0]?.text || "I’m here—how can I help?",
+        text: response.data.content || "I’m here—how can I help?",
         isAI: true,
       };
       setMessages((prev) => [...prev, aiMessage]);
@@ -101,7 +106,10 @@ export default function AI() {
       const errorMsg =
         error.code === "ECONNABORTED"
           ? "Request timed out—please try again."
-          : error.response?.data?.error || error.response?.data?.details || error.message || "Something went wrong.";
+          : error.response?.data?.error ||
+            error.response?.data?.details ||
+            error.message ||
+            "Something went wrong with the AI.";
       setError(errorMsg);
       setMessages((prev) => [
         ...prev,
@@ -215,10 +223,10 @@ export default function AI() {
       </motion.div>
 
       <style jsx global>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
         body {
-          font-family: 'Inter', sans-serif;
+          font-family: "Inter", sans-serif;
         }
 
         ::-webkit-scrollbar {
