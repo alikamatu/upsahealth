@@ -1,9 +1,19 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUserContext } from "../context/userContext";
-const { GoogleGenerativeAI } = require("@google/generative-ai");
 import { FaPaperPlane, FaSpinner, FaExclamationCircle, FaRedo } from "react-icons/fa";
+
+// Dynamic base URL
+const BASE_URL = process.env.NODE_ENV === "development" ? "http://localhost:5000" : "https://healthbackend.vercel.app";
+
+const api = axios.create({
+  baseURL: BASE_URL,
+  withCredentials: true,
+  headers: { "Content-Type": "application/json" },
+  timeout: 5000,
+});
 
 // Animation Variants
 const containerVariants = {
@@ -27,6 +37,7 @@ export default function AI() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -37,7 +48,27 @@ export default function AI() {
         isAI: true,
       },
     ]);
-  }, [user]);
+
+    const testConnection = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/chat/test");
+        console.log("Backend connection test:", response.data);
+        setError(null);
+      } catch (err) {
+        console.error("Backend connection test failed:", err);
+        setError(
+          err.code === "ECONNABORTED"
+            ? "Server timed out—retrying soon!"
+            : "Can’t reach the server. Is it running at " + BASE_URL + "?"
+        );
+        if (retryCount < 3) {
+          setTimeout(() => setRetryCount((prev) => prev + 1), 3000);
+        }
+      }
+    };
+
+    testConnection();
+  }, [user, retryCount]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -53,31 +84,25 @@ export default function AI() {
     setLoading(true);
 
     try {
-      const genAI = new GoogleGenerativeAI("AIzaSyCBf8xA-B0orrcFrFCUnMaQ4kSgJCMYNJU");
-      const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-      const chat = model.startChat({
-        history: messages.filter(m => m.id !==1).map(m => ({
-          role: m.isAI ? "model" : "user",
-          parts: m.text
-        })),
-        generationConfig: {
-          maxOutputTokens: 200,
-        },
+      console.log("Sending message to backend:", input);
+      const response = await axios.post("http://localhost:5000/api/chat", {
+        messages: [{ role: "user", content: input }],
       });
-
-      const result = await chat.sendMessage(input);
-      const response = await result.response;
-      const text = response.text();
+      console.log("Received response:", response.data);
 
       const aiMessage = {
         id: messages.length + 2,
-        text: text || "I’m here—how can I help?",
+        text: response.data.content?.[0]?.text || "I’m here—how can I help?",
         isAI: true,
       };
       setMessages((prev) => [...prev, aiMessage]);
     } catch (error) {
-      console.error("Gemini API Error:", error);
-      setError("Something went wrong with the Gemini API.");
+      console.error("API Error:", error.response?.data || error.message);
+      const errorMsg =
+        error.code === "ECONNABORTED"
+          ? "Request timed out—please try again."
+          : error.response?.data?.error || error.response?.data?.details || error.message || "Something went wrong.";
+      setError(errorMsg);
       setMessages((prev) => [
         ...prev,
         { id: prev.length + 2, text: "Oops, I hit a snag. Try again?", isAI: true },
@@ -88,6 +113,7 @@ export default function AI() {
   };
 
   const handleRetry = () => {
+    setRetryCount((prev) => prev + 1);
     setError(null);
   };
 
@@ -204,7 +230,7 @@ export default function AI() {
         }
 
         ::-webkit-scrollbar-thumb {
-          background: rgba(136, 136, 0.5);
+          background: rgba(136, 136, 136, 0.5);
           border-radius: 3px;
         }
 
