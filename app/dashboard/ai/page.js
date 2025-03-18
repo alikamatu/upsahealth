@@ -6,16 +6,16 @@ import { useUserContext } from "../context/userContext";
 import { FaPaperPlane, FaSpinner, FaExclamationCircle, FaRedo } from "react-icons/fa";
 import ReactMarkdown from "react-markdown";
 
+
 const BASE_URL = "http://localhost:5000"
 
 const api = axios.create({
   baseURL: BASE_URL,
-  withCredentials: true, // For session cookies if needed
+  withCredentials: true,
   headers: { "Content-Type": "application/json" },
-  timeout: 10000, // Increased timeout for AI response
+  timeout: 10000,
 });
 
-// Animation Variants
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { duration: 0.6, ease: "easeOut" } },
@@ -40,7 +40,6 @@ export default function AI() {
   const [retryCount, setRetryCount] = useState(0);
   const messagesEndRef = useRef(null);
 
-  // Initial message and connection test
   useEffect(() => {
     setMessages([
       {
@@ -52,7 +51,6 @@ export default function AI() {
 
     const testConnection = async () => {
       try {
-        // Test the /api/gemini endpoint with a simple prompt
         const response = await axios.post("http://localhost:5000/api/gemini", { prompt: "Test connection" });
         console.log("Gemini AI test response:", response.data.content);
         setError(null);
@@ -72,52 +70,63 @@ export default function AI() {
     testConnection();
   }, [user, retryCount]);
 
-  // Scroll to the latest message
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
     const handleSendMessage = async () => {
-    if (!input.trim() || loading) return;
-    setError(null);
-  
-    const userMessage = { id: messages.length + 1, text: input, isAI: false };
-    setMessages((prev) => [...prev, userMessage]);
-    setInput("");
-    setLoading(true);
-  
-    try {
-      console.log("Sending message to Gemini AI:", input);
-      const response = await axios.post("http://localhost:5000/api/gemini", { prompt: input });
-      console.log("Received response from Gemini AI:", response.data);
-  
-      // Sanitize the AI's response to remove Markdown syntax
-      const sanitizedContent = response.data.content.replace(/[*_~`]/g, "");
-  
-      const aiMessage = {
-        id: messages.length + 2,
-        text: sanitizedContent || "I’m here—how can I help?",
-        isAI: true,
-      };
-      setMessages((prev) => [...prev, aiMessage]);
-    } catch (error) {
-      console.error("API Error:", error.response?.data || error.message);
-      const errorMsg =
-        error.code === "ECONNABORTED"
-          ? "Request timed out—please try again."
-          : error.response?.data?.error ||
-            error.response?.data?.details ||
-            error.message ||
-            "Something went wrong with the AI.";
-      setError(errorMsg);
-      setMessages((prev) => [
-        ...prev,
-        { id: prev.length + 2, text: "Oops, I hit a snag. Try again?", isAI: true },
-      ]);
-    } finally {
-      setLoading(false);
-    }
-  };
+      if (!input.trim() || loading) return;
+      setError(null);
+    
+      const userMessage = { id: messages.length + 1, text: input, isAI: false };
+      setMessages((prev) => [...prev, userMessage]);
+      setInput("");
+      setLoading(true);
+    
+      try {
+        console.log("Sending message to Gemini AI:", input);
+        const response = await axios.post("http://localhost:5000/api/gemini", { prompt: input });
+        console.log("Received response from Gemini AI:", response.data);
+    
+        const sanitizedContent = response.data.content.replace(/[*_~`]/g, "");
+    
+        const aiMessage = {
+          id: messages.length + 2,
+          text: sanitizedContent || "I’m here—how can I help?",
+          isAI: true,
+        };
+        setMessages((prev) => [...prev, aiMessage]);
+    
+        // Save the conversation to the database
+        const conversationData = {
+          userId: user?.id || "guest", // Replace with actual user ID if available
+          messages: [...messages, userMessage, aiMessage].map((msg) => ({
+            text: msg.text,
+            isAI: msg.isAI,
+            timestamp: new Date(),
+          })),
+        };
+    
+        await axios.post("http://localhost:5000/api/conversations", conversationData);
+        console.log("Conversation saved successfully");
+      } catch (error) {
+        console.error("API Error:", error.response?.data || error.message);
+        const errorMsg =
+          error.code === "ECONNABORTED"
+            ? "Request timed out—please try again."
+            : error.response?.data?.error ||
+              error.response?.data?.details ||
+              error.message ||
+              "Something went wrong with the AI.";
+        setError(errorMsg);
+        setMessages((prev) => [
+          ...prev,
+          { id: prev.length + 2, text: "Oops, I hit a snag. Try again?", isAI: true },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
 
   const handleRetry = () => {
     setRetryCount((prev) => prev + 1);
@@ -166,10 +175,7 @@ export default function AI() {
 
         <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-lg p-6 border border-gray-100 flex-1 max-h-[70vh] overflow-y-auto">
           <AnimatePresence>
-                        import ReactMarkdown from "react-markdown";
-            
-            // Inside the message rendering loop
-            {messages.map((message) => (
+                        {messages.map((message) => (
               <motion.div
                 key={message.id}
                 variants={messageVariants}
@@ -184,9 +190,17 @@ export default function AI() {
                       : "bg-gradient-to-r from-teal-500 to-indigo-500 text-white"
                   }`}
                 >
-                  <ReactMarkdown className="text-sm leading-relaxed">
-                    {message.text}
-                  </ReactMarkdown>
+                  <div className="text-sm leading-relaxed">
+                  <ReactMarkdown
+  components={{
+    p: ({ node, ...props }) => <p className="text-gray-700" {...props} />,
+    strong: ({ node, ...props }) => <strong className="font-bold" {...props} />,
+    em: ({ node, ...props }) => <em className="italic" {...props} />,
+  }}
+>
+  {message.text}
+</ReactMarkdown>
+                  </div>
                 </div>
               </motion.div>
             ))}
