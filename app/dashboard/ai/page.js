@@ -3,11 +3,11 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUserContext } from "../context/userContext";
-import { FaPaperPlane, FaSpinner, FaExclamationCircle, FaRedo } from "react-icons/fa";
+import { FaPaperPlane, FaSpinner, FaExclamationCircle, FaRedo, FaPlus } from "react-icons/fa";
 import ReactMarkdown from "react-markdown";
 
-
-const BASE_URL = "http://localhost:5000"
+// Dynamic base URL
+const BASE_URL = "http://localhost:5000";
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -16,6 +16,7 @@ const api = axios.create({
   timeout: 10000,
 });
 
+// Animation Variants
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { duration: 0.6, ease: "easeOut" } },
@@ -39,7 +40,10 @@ export default function AI() {
   const [error, setError] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
   const messagesEndRef = useRef(null);
+  const [conversations, setConversations] = useState([]);
+  const [selectedConversation, setSelectedConversation] = useState([]);
 
+  // Initial setup and connection test
   useEffect(() => {
     setMessages([
       {
@@ -70,63 +74,84 @@ export default function AI() {
     testConnection();
   }, [user, retryCount]);
 
+  // Fetch conversations
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-    const handleSendMessage = async () => {
-      if (!input.trim() || loading) return;
-      setError(null);
-    
-      const userMessage = { id: messages.length + 1, text: input, isAI: false };
-      setMessages((prev) => [...prev, userMessage]);
-      setInput("");
-      setLoading(true);
-    
+    const fetchConversations = async () => {
       try {
-        console.log("Sending message to Gemini AI:", input);
-        const response = await axios.post("http://localhost:5000/api/gemini", { prompt: input });
-        console.log("Received response from Gemini AI:", response.data);
-    
-        const sanitizedContent = response.data.content.replace(/[*_~`]/g, "");
-    
-        const aiMessage = {
-          id: messages.length + 2,
-          text: sanitizedContent || "I’m here—how can I help?",
-          isAI: true,
-        };
-        setMessages((prev) => [...prev, aiMessage]);
-    
-        // Save the conversation to the database
-        const conversationData = {
-          userId: user?.id || "guest", // Replace with actual user ID if available
-          messages: [...messages, userMessage, aiMessage].map((msg) => ({
-            text: msg.text,
-            isAI: msg.isAI,
-            timestamp: new Date(),
-          })),
-        };
-    
-        await axios.post("http://localhost:5000/api/conversations", conversationData);
-        console.log("Conversation saved successfully");
+        const userId = localStorage.getItem("userId") || "guest";
+        const response = await axios.get(`http://localhost:5000/api/conversations/${userId}`);
+        console.log("Fetched conversations:", response.data);
+        setConversations(response.data);
+        if (response.data.length > 0) {
+          setSelectedConversation(response.data[0].messages);
+        }
       } catch (error) {
-        console.error("API Error:", error.response?.data || error.message);
-        const errorMsg =
-          error.code === "ECONNABORTED"
-            ? "Request timed out—please try again."
-            : error.response?.data?.error ||
-              error.response?.data?.details ||
-              error.message ||
-              "Something went wrong with the AI.";
-        setError(errorMsg);
-        setMessages((prev) => [
-          ...prev,
-          { id: prev.length + 2, text: "Oops, I hit a snag. Try again?", isAI: true },
-        ]);
-      } finally {
-        setLoading(false);
+        console.error("Error fetching conversations:", error.message);
       }
     };
+
+    fetchConversations();
+  }, []);
+
+  // Scroll to latest message
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, selectedConversation]);
+
+  // Send message to AI
+  const handleSendMessage = async () => {
+    if (!input.trim() || loading) return;
+    setError(null);
+
+    const userMessage = { id: messages.length + 1, text: input, isAI: false };
+    setMessages((prev) => [...prev, userMessage]);
+    setSelectedConversation((prev) => [...prev, userMessage]);
+    setInput("");
+    setLoading(true);
+
+    try {
+      console.log("Sending message to Gemini AI:", input);
+      const response = await axios.post("http://localhost:5000/api/gemini", { prompt: input });
+      console.log("Received response from Gemini AI:", response.data);
+
+      const sanitizedContent = response.data.content.replace(/[*_~`]/g, "");
+      const aiMessage = {
+        id: messages.length + 2,
+        text: sanitizedContent || "I’m here—how can I help?",
+        isAI: true,
+      };
+      setMessages((prev) => [...prev, aiMessage]);
+      setSelectedConversation((prev) => [...prev, aiMessage]);
+
+      const conversationData = {
+        userId: localStorage.getItem("userId") || "guest",
+        messages: [...selectedConversation, userMessage, aiMessage].map((msg) => ({
+          text: msg.text,
+          isAI: msg.isAI,
+          timestamp: new Date(),
+        })),
+      };
+
+      await api.post("/api/conversations", conversationData);
+      console.log("Conversation saved successfully");
+
+      const updatedConversations = await api.get(`/api/conversations/${localStorage.getItem("userId") || "guest"}`);
+      setConversations(updatedConversations.data);
+    } catch (error) {
+      console.error("API Error:", error.response?.data || error.message);
+      const errorMsg =
+        error.code === "ECONNABORTED"
+          ? "Request timed out—please try again."
+          : error.response?.data?.error || error.message || "Something went wrong.";
+      setError(errorMsg);
+      setMessages((prev) => [
+        ...prev,
+        { id: prev.length + 2, text: "Oops, I hit a snag. Try again?", isAI: true },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleRetry = () => {
     setRetryCount((prev) => prev + 1);
@@ -134,136 +159,163 @@ export default function AI() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-indigo-50 to-purple-50 p-6 md:p-12 flex flex-col items-center">
+    <div className="min-h-screen bg-gradient-to-br from-cyan-100 via-teal-200 to-cyan-300 flex items-center justify-center p-4 md:p-8">
+      {/* Background floating effect */}
+      <motion.div
+        className="absolute inset-0 bg-[radial-gradient(circle,rgba(128,222,234,0.2),transparent)]"
+      />
+
       <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="visible"
-        className="max-w-2xl w-full flex flex-col gap-6"
+        className="relative z-10 w-full max-w-4xl flex flex-col md:flex-row gap-6"
       >
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 text-center">
-          Your AI Companion
-        </h1>
-        <p className="text-gray-600 text-center text-sm md:text-base">
-          Chat with me about anything on your mind—I’m here to listen.
-        </p>
-
-        <AnimatePresence>
-          {error && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="p-4 bg-red-100 border border-red-300 text-red-700 rounded-2xl flex items-center justify-between gap-3"
-            >
-              <div className="flex items-center gap-3">
-                <FaExclamationCircle size={20} />
-                <span>{error}</span>
-              </div>
-              <motion.button
-                variants={buttonVariants}
-                whileHover="hover"
-                whileTap="tap"
-                onClick={handleRetry}
-                className="p-2 bg-red-500 text-white rounded-full"
-              >
-                <FaRedo size={16} />
-              </motion.button>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-lg p-6 border border-gray-100 flex-1 max-h-[70vh] overflow-y-auto">
-          <AnimatePresence>
-                        {messages.map((message) => (
-              <motion.div
-                key={message.id}
-                variants={messageVariants}
-                initial="hidden"
-                animate="visible"
-                className={`flex ${message.isAI ? "justify-start" : "justify-end"} mb-4`}
-              >
-                <div
-                  className={`p-4 rounded-2xl max-w-xs md:max-w-md shadow-md ${
-                    message.isAI
-                      ? "bg-gradient-to-r from-teal-100 to-indigo-100 text-gray-900"
-                      : "bg-gradient-to-r from-teal-500 to-indigo-500 text-white"
-                  }`}
-                >
-                  <div className="text-sm leading-relaxed">
-                  <ReactMarkdown
-  components={{
-    p: ({ node, ...props }) => <p className="text-gray-700" {...props} />,
-    strong: ({ node, ...props }) => <strong className="font-bold" {...props} />,
-    em: ({ node, ...props }) => <em className="italic" {...props} />,
-  }}
->
-  {message.text}
-</ReactMarkdown>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-            {loading && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex justify-center"
-              >
-                <FaSpinner className="w-6 h-6 text-indigo-500 animate-spin" />
-              </motion.div>
-            )}
-          </AnimatePresence>
-          <div ref={messagesEndRef} />
-        </div>
-
-        <div className="flex items-center gap-4">
-          <input
-            type="text"
-            placeholder="Type your message..."
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
-            disabled={loading}
-            className="flex-1 p-4 text-sm border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-teal-300 bg-white/80 backdrop-blur-md placeholder-gray-400 disabled:opacity-50"
-          />
+        {/* Conversation Sidebar */}
+        <div className="md:w-1/3 flex flex-col gap-4">
+          <motion.div
+            className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-lg p-4 border border-teal-100"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, }}
+            transition={{ duration: 0.6 }}
+          >
+            <h2 className="text-lg font-semibold text-teal-900 mb-3">Your Conversations</h2>
+            <div className="max-h-64 overflow-y-auto space-y-2">
+              <AnimatePresence>
+                {conversations.map((conv, index) => (
+                  <motion.div
+                  key={conv._id || `conversation-${index}`} 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    onClick={() => setSelectedConversation(conv.messages)}
+                    className={`p-3 rounded-xl cursor-pointer text-sm ${
+                      selectedConversation === conv.messages
+                        ? "bg-teal-500 text-white"
+                        : "bg-teal-50 text-teal-900 hover:bg-teal-100"
+                    }`}
+                  >
+                    Conversation {index + 1} - {new Date(conv.createdAt).toLocaleString()}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          </motion.div>
           <motion.button
             variants={buttonVariants}
             whileHover="hover"
             whileTap="tap"
-            onClick={handleSendMessage}
-            disabled={loading}
-            className="p-4 bg-gradient-to-r from-teal-500 to-indigo-500 text-white rounded-full shadow-md disabled:opacity-50"
+            onClick={() => {
+              setSelectedConversation([]);
+              setMessages([
+                {
+                  id: 1,
+                  text: `Hey ${user?.username || "friend"}! Ready for a fresh start?`,
+                  isAI: true,
+                },
+              ]);
+            }}
+            className="flex items-center justify-center gap-2 p-3 bg-teal-600 text-white rounded-xl shadow-md"
           >
-            <FaPaperPlane size={18} />
+            <FaPlus size={16} /> New Chat
           </motion.button>
         </div>
+
+        {/* Chat Area */}
+        <div className="md:w-2/3 flex flex-col gap-4">
+          <motion.div
+            className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-lg p-6 border border-teal-100 flex-1 max-h-[70vh] overflow-y-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <AnimatePresence>
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  className="p-4 bg-red-100 border border-red-300 text-red-700 rounded-xl flex items-center justify-between gap-3 mb-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <FaExclamationCircle size={18} />
+                    <span>{error}</span>
+                  </div>
+                  <motion.button
+                    variants={buttonVariants}
+                    whileHover="hover"
+                    whileTap="tap"
+                    onClick={handleRetry}
+                    className="p-2 bg-red-500 text-white rounded-full"
+                  >
+                    <FaRedo size={14} />
+                  </motion.button>
+                </motion.div>
+              )}
+              {(selectedConversation.length > 0 ? selectedConversation : messages).map((message, index) => (
+                <motion.div
+                key={`${message.id || index}-${message.text}`}
+                  variants={messageVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className={`flex ${message.isAI ? "justify-start" : "justify-end"} mb-4`}
+                >
+                  <div
+                    className={`p-4 rounded-xl max-w-xs md:max-w-md shadow-md ${
+                      message.isAI
+                        ? "bg-teal-100 text-teal-900"
+                        : "bg-teal-500 text-white"
+                    }`}
+                  >
+                    <ReactMarkdown
+                      components={{
+                        p: ({ node, ...props }) => <p className="text-sm leading-relaxed" {...props} />,
+                        strong: ({ node, ...props }) => <strong className="font-bold" {...props} />,
+                        em: ({ node, ...props }) => <em className="italic" {...props} />,
+                      }}
+                    >
+                      {message.text}
+                    </ReactMarkdown>
+                  </div>
+                </motion.div>
+              ))}
+              {loading && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="flex justify-center"
+                >
+                  <FaSpinner className="w-6 h-6 text-teal-500 animate-spin" />
+                </motion.div>
+              )}
+            </AnimatePresence>
+            <div ref={messagesEndRef} />
+          </motion.div>
+
+          {/* Input Area */}
+          <div className="flex items-center gap-3">
+            <input
+              type="text"
+              placeholder="Type your message..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+              disabled={loading}
+              className="flex-1 p-3 text-sm border border-teal-200 rounded-full focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white/80 backdrop-blur-md placeholder-teal-400 disabled:opacity-50"
+            />
+            <motion.button
+              variants={buttonVariants}
+              whileHover="hover"
+              whileTap="tap"
+              onClick={handleSendMessage}
+              disabled={loading}
+              className="p-3 bg-teal-600 text-white rounded-full shadow-md disabled:opacity-50"
+            >
+              <FaPaperPlane size={16} />
+            </motion.button>
+          </div>
+        </div>
       </motion.div>
-
-      <style jsx global>{`
-        @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
-
-        body {
-          font-family: "Inter", sans-serif;
-        }
-
-        ::-webkit-scrollbar {
-          width: 6px;
-        }
-
-        ::-webkit-scrollbar-track {
-          background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-          background: rgba(136, 136, 136, 0.5);
-          border-radius: 3px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-          background: rgba(85, 85, 85, 0.7);
-        }
-      `}</style>
     </div>
   );
 }
