@@ -4,12 +4,9 @@ import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUserContext } from "../context/userContext";
 import { FaPaperPlane, FaSpinner, FaExclamationCircle, FaRedo } from "react-icons/fa";
+import ReactMarkdown from "react-markdown";
 
-// Dynamic base URL based on environment
-const BASE_URL =
-  process.env.NODE_ENV === "development"
-    ? "http://localhost:5000"
-    : "https://healthbackend.vercel.app";
+const BASE_URL = "http://localhost:5000"
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -56,7 +53,7 @@ export default function AI() {
     const testConnection = async () => {
       try {
         // Test the /api/gemini endpoint with a simple prompt
-        const response = await api.post("/api/gemini", { prompt: "Test connection" });
+        const response = await axios.post("http://localhost:5000/api/gemini", { prompt: "Test connection" });
         console.log("Gemini AI test response:", response.data.content);
         setError(null);
       } catch (err) {
@@ -80,24 +77,26 @@ export default function AI() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Send message to the backend /api/gemini endpoint
-  const handleSendMessage = async () => {
+    const handleSendMessage = async () => {
     if (!input.trim() || loading) return;
     setError(null);
-
+  
     const userMessage = { id: messages.length + 1, text: input, isAI: false };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setLoading(true);
-
+  
     try {
       console.log("Sending message to Gemini AI:", input);
-      const response = await api.post("/api/gemini", { prompt: input });
+      const response = await axios.post("http://localhost:5000/api/gemini", { prompt: input });
       console.log("Received response from Gemini AI:", response.data);
-
+  
+      // Sanitize the AI's response to remove Markdown syntax
+      const sanitizedContent = response.data.content.replace(/[*_~`]/g, "");
+  
       const aiMessage = {
         id: messages.length + 2,
-        text: response.data.content || "I’m here—how can I help?",
+        text: sanitizedContent || "I’m here—how can I help?",
         isAI: true,
       };
       setMessages((prev) => [...prev, aiMessage]);
@@ -167,6 +166,9 @@ export default function AI() {
 
         <div className="bg-white/90 backdrop-blur-lg rounded-3xl shadow-lg p-6 border border-gray-100 flex-1 max-h-[70vh] overflow-y-auto">
           <AnimatePresence>
+                        import ReactMarkdown from "react-markdown";
+            
+            // Inside the message rendering loop
             {messages.map((message) => (
               <motion.div
                 key={message.id}
@@ -182,7 +184,9 @@ export default function AI() {
                       : "bg-gradient-to-r from-teal-500 to-indigo-500 text-white"
                   }`}
                 >
-                  <p className="text-sm leading-relaxed">{message.text}</p>
+                  <ReactMarkdown className="text-sm leading-relaxed">
+                    {message.text}
+                  </ReactMarkdown>
                 </div>
               </motion.div>
             ))}
