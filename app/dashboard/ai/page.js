@@ -230,28 +230,6 @@ export default function AI() {
             transition={{ duration: 0.6 }}
           >
             <AnimatePresence>
-              {error && (
-                <motion.div
-                  initial={{ opacity: 0, y: -20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="p-4 bg-red-100 border border-red-300 text-red-700 rounded-xl flex items-center justify-between gap-3 mb-4"
-                >
-                  <div className="flex items-center gap-2">
-                    <FaExclamationCircle size={18} />
-                    <span>{error}</span>
-                  </div>
-                  <motion.button
-                    variants={buttonVariants}
-                    whileHover="hover"
-                    whileTap="tap"
-                    onClick={handleRetry}
-                    className="p-2 bg-red-500 text-white rounded-full"
-                  >
-                    <FaRedo size={14} />
-                  </motion.button>
-                </motion.div>
-              )}
               {(selectedConversation.length > 0 ? selectedConversation : messages).map((message, index) => (
                 <motion.div
                 key={`${message.id || index}-${message.text}`}
