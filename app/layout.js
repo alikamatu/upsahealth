@@ -40,7 +40,7 @@ export const metadata = {
     type: "website",
     images: [
       {
-        url: "https://yourwebsite.com/og-image.jpg", // Replace with an actual image URL
+        url: "https://upsamentalhealth.vercel.app/_next/static/media/happy.a5c02966.jpg",
         width: 1200,
         height: 630,
         alt: "Mental Health Support",
