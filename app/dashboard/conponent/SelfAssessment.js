@@ -78,7 +78,7 @@ function ResultPage({ mood, responses, onRestart }) {
     ],
     "Calm": [
       { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Try a breathing exercise.", link: "/breathing" },
-      { icon: <FaHeart className="w-6 h-6 text-pink-500" />, text: "Reach out the world.", link: "/blog" },
+      { icon: <FaHeart className="w-6 h-6 text-pink-500" />, text: "Reach out to the world.", link: "/blog" },
       { icon: <FaBook className="w-6 h-6 text-indigo-500" />, text: "Read mental health resources.", link: "/library" },
     ],
     "Moderate": [
