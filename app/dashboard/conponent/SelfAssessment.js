@@ -72,29 +72,29 @@ function ResultPage({ mood, responses, onRestart }) {
 
   const recommendations = {
     "Very Calm": [
-      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Practice mindfulness to stay grounded.", link: "/journal" },
+      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Practice mindfulness to stay grounded.", link: "/dashboard/journal" },
       { icon: <FaBook className="w-6 h-6 text-indigo-500" />, text: "Set small goals.", link: "/dashboard/goals" },
-      { icon: <FaUserFriends className="w-6 h-6 text-pink-500" />, text: "Connect with friends.", link: "/chatroom" },
+      { icon: <FaUserFriends className="w-6 h-6 text-pink-500" />, text: "Connect with friends.", link: "/dashboard/chatroom" },
     ],
     "Calm": [
-      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Try a breathing exercise.", link: "/breathing" },
-      { icon: <FaHeart className="w-6 h-6 text-pink-500" />, text: "Reach out to the world.", link: "/blog" },
-      { icon: <FaBook className="w-6 h-6 text-indigo-500" />, text: "Read mental health resources.", link: "/library" },
+      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Connect with friends.", link: "/dashboard/chatroom" },
+      { icon: <FaHeart className="w-6 h-6 text-pink-500" />, text: "Reach out to the world.", link: "/dashboard/blog" },
+      { icon: <FaBook className="w-6 h-6 text-indigo-500" />, text: "Read mental health resources.", link: "/dashboard/library" },
     ],
     "Moderate": [
-      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Read mental health resources.", link: "/library" },
+      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Read mental health resources.", link: "/dashboard/library" },
       { icon: <FaBook className="w-6 h-6 text-indigo-500" />, text: "Journal your thoughts.", link: "/dashboard/journal" },
-      { icon: <FaPhone className="w-6 h-6 text-purple-500" />, text: "Talk to a friend.", link: "/chatroom" },
+      { icon: <FaPhone className="w-6 h-6 text-purple-500" />, text: "Talk to a friend.", link: "/dashboard/chatroom" },
     ],
     "High Stress": [
-      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Try relaxation techniques.", link: "/chatroom" },
-      { icon: <FaPhone className="w-6 h-6 text-purple-500" />, text: "Contact a therapist.", link: "/professionals" },
+      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Try relaxation techniques.", link: "/dashboard/chatroom" },
+      { icon: <FaPhone className="w-6 h-6 text-purple-500" />, text: "Contact a therapist.", link: "/dashboard/professionals" },
       { icon: <FaBook className="w-6 h-6 text-indigo-500" />, text: "Set small goals.", link: "/dashboard/goals" },
     ],
     "Severe Stress": [
-      { icon: <FaPhone className="w-6 h-6 text-purple-500" />, text: "Seek professional help now.", link: "/professionals" },
-      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Reach out the world", link: "/blog" },
-      { icon: <FaHeart className="w-6 h-6 text-pink-500" />, text: "Reach out to a loved one.", link: "/chatroom" },
+      { icon: <FaPhone className="w-6 h-6 text-purple-500" />, text: "Seek professional help now.", link: "/dashboard/professionals" },
+      { icon: <FaLeaf className="w-6 h-6 text-teal-500" />, text: "Reach out the world", link: "/dashboard/blog" },
+      { icon: <FaHeart className="w-6 h-6 text-pink-500" />, text: "Reach out to a loved one.", link: "/dashboard/chatroom" },
     ],
   };
 
