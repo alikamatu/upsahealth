@@ -49,14 +49,14 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    site: "@your_twitter_handle", // Replace with actual Twitter handle
+    site: "@your_twitter_handle", 
     title: "Mental Health Support & Resources | UPSA Health",
     description:
       "Find mental health resources, self-assessment tools, and a supportive community to improve your well-being.",
-    image: "https://yourwebsite.com/twitter-image.jpg", // Replace with actual image
+    image: "https://yourwebsite.com/twitter-image.jpg", 
   },
   icons: {
-    icon: "/favicon.ico", // Ensure you have a favicon in the public directory
+    icon: "/favicon.ico",
   },
 };
 
