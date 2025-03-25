@@ -55,7 +55,7 @@ export default function AI() {
 
     const testConnection = async () => {
       try {
-        const response = await axios.post("https://healthbackend.vercel.app/api/gemini", { prompt: "Test connection" });
+        const response = await axios.post("https://healthbackend.vercel.ap/api/gemini", { prompt: "Test connection" });
         console.log("Gemini AI test response:", response.data.content);
         setError(null);
       } catch (err) {
